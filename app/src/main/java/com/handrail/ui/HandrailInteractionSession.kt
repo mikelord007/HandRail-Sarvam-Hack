@@ -344,8 +344,7 @@ class HandrailInteractionSession(baseContext: Context) :
     private suspend fun speak(text: String) {
         if (text.isBlank()) return
         val v = voice
-        val audio = bulbulClient.synthesize(text, v.language.code, v.speaker.id, v.pace)
-        audio.onSuccess { player.play(it) }
+        player.playStream(bulbulClient.httpClient, bulbulClient.streamRequest(text, v.language.code, v.speaker.id, v.pace))
     }
 
     private companion object {
