@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="ic_launcher_background">#101418</color>
+    <color name="ic_launcher_background">#F3F2F2</color>
 
     <!-- Classical design system ground — see ui/theme/HandrailColors.kt. Kept
          in sync manually; used only where a resource-level color is required

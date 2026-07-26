@@ -1,9 +1,7 @@
 package com.handrail.ui.screens.onboarding
 
-import androidx.compose.foundation.background
-import androidx.compose.foundation.border
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -11,7 +9,6 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -23,6 +20,7 @@ import androidx.compose.ui.unit.em
 import androidx.compose.ui.unit.sp
 import com.handrail.ui.components.CtaButton
 import com.handrail.ui.components.Kicker
+import com.handrail.ui.icons.HandrailIcons
 import com.handrail.ui.theme.HandrailColors
 import com.handrail.ui.theme.HandrailType
 
@@ -39,18 +37,11 @@ fun WelcomeScreen(onBegin: () -> Unit) {
             verticalArrangement = Arrangement.Center,
             horizontalAlignment = Alignment.Start,
         ) {
-            Box(
-                modifier = Modifier
-                    .size(96.dp)
-                    .border(1.dp, HandrailColors.Accent, CircleShape),
-                contentAlignment = Alignment.Center,
-            ) {
-                Box(
-                    modifier = Modifier
-                        .size(width = 2.dp, height = 44.dp)
-                        .background(HandrailColors.Accent),
-                )
-            }
+            Image(
+                imageVector = HandrailIcons.Logo,
+                contentDescription = null,
+                modifier = Modifier.size(96.dp),
+            )
             Spacer(Modifier.height(26.dp))
             Text(
                 text = "Handrail",

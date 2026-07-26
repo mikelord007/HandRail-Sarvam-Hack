@@ -8,6 +8,7 @@ import androidx.compose.ui.graphics.StrokeJoin
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.graphics.vector.path
 import androidx.compose.ui.unit.dp
+import com.handrail.ui.theme.HandrailColors
 
 /**
  * The six Lucide (lucide.dev, ISC license) icons the design uses, hand-built
@@ -153,6 +154,57 @@ object HandrailIcons {
             ) {
                 moveTo(5f, 12f); lineTo(19f, 12f)
                 moveTo(12f, 5f); lineTo(19f, 12f); lineTo(12f, 19f)
+            }
+        }.build()
+    }
+
+    /**
+     * The Handrail brand mark — transcribed from
+     * handrail-logo-export/handrail-logo.svg (viewBox 0 0 120 120): a ring,
+     * a handrail, and the stair line it runs beside. Multi-color (unlike the
+     * other icons here), so render with [androidx.compose.foundation.Image],
+     * not [androidx.compose.material3.Icon] — Icon's tint would flatten it.
+     */
+    val Logo: ImageVector by lazy {
+        ImageVector.Builder(
+            name = "HandrailLogo",
+            defaultWidth = 96.dp,
+            defaultHeight = 96.dp,
+            viewportWidth = 120f,
+            viewportHeight = 120f,
+        ).apply {
+            // Ring
+            path(fill = null, stroke = SolidColor(HandrailColors.Accent), strokeLineWidth = 1.5f) {
+                moveTo(18f, 60f)
+                arcTo(42f, 42f, 0f, isMoreThanHalf = true, isPositiveArc = false, x1 = 102f, y1 = 60f)
+                arcTo(42f, 42f, 0f, isMoreThanHalf = true, isPositiveArc = false, x1 = 18f, y1 = 60f)
+            }
+            // Rail underside — two faint parallel lines
+            path(fill = null, stroke = SolidColor(HandrailColors.Neutral400), strokeLineWidth = 1.5f, strokeLineCap = StrokeCap.Round) {
+                moveTo(32f, 70.9f); lineTo(74f, 45.7f); lineTo(88.5f, 45.7f)
+            }
+            path(fill = null, stroke = SolidColor(HandrailColors.Neutral400), strokeLineWidth = 1.5f, strokeLineCap = StrokeCap.Round) {
+                moveTo(32f, 75.5f); lineTo(74f, 50.3f); lineTo(88.5f, 50.3f)
+            }
+            // Stair line
+            path(
+                fill = null,
+                stroke = SolidColor(HandrailColors.Text),
+                strokeLineWidth = 2.5f,
+                strokeLineCap = StrokeCap.Round,
+                strokeLineJoin = StrokeJoin.Round,
+            ) {
+                moveTo(34f, 79f); lineTo(54f, 79f); lineTo(54f, 67f); lineTo(74f, 67f); lineTo(74f, 55f); lineTo(90f, 55f)
+            }
+            // Handrail top + posts
+            path(fill = null, stroke = SolidColor(HandrailColors.Accent), strokeLineWidth = 3.5f, strokeLineCap = StrokeCap.Round) {
+                moveTo(31f, 66.8f); lineTo(74f, 41f); lineTo(90f, 41f)
+            }
+            path(fill = null, stroke = SolidColor(HandrailColors.Accent), strokeLineWidth = 2.5f, strokeLineCap = StrokeCap.Round) {
+                moveTo(34f, 65f); lineTo(34f, 76.5f)
+            }
+            path(fill = null, stroke = SolidColor(HandrailColors.Accent), strokeLineWidth = 2.5f, strokeLineCap = StrokeCap.Round) {
+                moveTo(87f, 41f); lineTo(87f, 52.5f)
             }
         }.build()
     }
