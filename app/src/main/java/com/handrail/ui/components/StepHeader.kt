@@ -18,7 +18,7 @@ import androidx.compose.ui.unit.sp
 import com.handrail.ui.theme.HandrailColors
 
 /**
- * The shared onboarding header: "Step N of 7" on the left, "Back" on the
+ * The shared onboarding header: "Step N of 6" on the left, "Back" on the
  * right (both same kicker styling), then a hairline. [onBack] is null on the
  * one screen that has no Back — the promise screen.
  *
@@ -29,7 +29,7 @@ import com.handrail.ui.theme.HandrailColors
 fun StepHeader(
     step: Int,
     modifier: Modifier = Modifier,
-    total: Int = 7,
+    total: Int = 6,
     onBack: (() -> Unit)? = null,
     dividerBottomMargin: Dp = 30.dp,
     kickerColor: Color = HandrailColors.Neutral600,
