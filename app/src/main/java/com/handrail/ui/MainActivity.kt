@@ -333,16 +333,14 @@ class MainActivity : ComponentActivity() {
                 val errorText = ErrorPhrases.couldNotDoThat(v.language.code)
                 chatHistoryStore.upsert(entry.copy(turns = entry.turns + ChatTurn("assistant", errorText), status = ChatStatus.ERROR))
                 reloadHistory()
-                val audio = bulbulClient.synthesize(errorText, v.language.code, v.speaker.id, v.pace)
-                audio.onSuccess { narrationPlayer.play(it) }
+                narrationPlayer.playStream(bulbulClient.httpClient, bulbulClient.streamRequest(errorText, v.language.code, v.speaker.id, v.pace))
                 return@launch
             }
 
             chatHistoryStore.upsert(entry.copy(turns = entry.turns + ChatTurn("assistant", replyText), status = ChatStatus.DONE))
             reloadHistory()
 
-            val audio = bulbulClient.synthesize(replyText, v.language.code, v.speaker.id, v.pace)
-            audio.onSuccess { narrationPlayer.play(it) }
+            narrationPlayer.playStream(bulbulClient.httpClient, bulbulClient.streamRequest(replyText, v.language.code, v.speaker.id, v.pace))
         }
     }
 
@@ -419,13 +417,10 @@ class MainActivity : ComponentActivity() {
         selectedSpeaker = speaker
         lifecycleScope.launch {
             val sampleLine = applicationContext.withLocale(selectedLanguage.code).getString(R.string.onboarding_voice_sample_line)
-            val audio = bulbulClient.synthesize(
-                sampleLine,
-                selectedLanguage.code,
-                speaker.id,
-                VoiceSettings.PACE_NORMAL,
+            narrationPlayer.playStream(
+                bulbulClient.httpClient,
+                bulbulClient.streamRequest(sampleLine, selectedLanguage.code, speaker.id, VoiceSettings.PACE_NORMAL),
             )
-            audio.onSuccess { narrationPlayer.play(it) }
         }
     }
 

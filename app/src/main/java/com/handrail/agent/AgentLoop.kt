@@ -213,8 +213,7 @@ class AgentLoop(
 
     private suspend fun speak(text: String) {
         if (text.isBlank()) return
-        val audio = bulbulClient.synthesize(text, language.code, voice.speaker.id, voice.pace)
-        audio.onSuccess { player.play(it) }
+        player.playStream(bulbulClient.httpClient, bulbulClient.streamRequest(text, language.code, voice.speaker.id, voice.pace))
     }
 
     private companion object {

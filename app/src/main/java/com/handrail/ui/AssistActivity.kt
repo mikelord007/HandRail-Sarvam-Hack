@@ -248,7 +248,7 @@ class AssistActivity : ComponentActivity() {
             narrationLine = narrationText
             stepLabel = ""
             val v = voice
-            val audio = bulbulClient.synthesize(narrationText, v.language.code, v.speaker.id, v.pace)
+            val audio = player.playStream(bulbulClient.httpClient, bulbulClient.streamRequest(narrationText, v.language.code, v.speaker.id, v.pace))
             if (audio.isFailure) {
                 // The narration channel itself is what failed — nothing left to narrate with.
                 Log.e(TAG, "Couldn't speak the narration.", audio.exceptionOrNull())
@@ -256,7 +256,6 @@ class AssistActivity : ComponentActivity() {
                 return@launch
             }
 
-            player.play(audio.getOrThrow())
             voiceState = VoiceState.Idle
             // A narration entry so History isn't empty on a demo that never runs a takeover task.
             chatHistoryStore.upsert(
@@ -516,8 +515,7 @@ class AssistActivity : ComponentActivity() {
 
     private suspend fun speakError() {
         val v = voice
-        val audio = bulbulClient.synthesize(ErrorPhrases.couldNotDoThat(v.language.code), v.language.code, v.speaker.id, v.pace)
-        audio.onSuccess { player.play(it) }
+        player.playStream(bulbulClient.httpClient, bulbulClient.streamRequest(ErrorPhrases.couldNotDoThat(v.language.code), v.language.code, v.speaker.id, v.pace))
             .onFailure { Log.e(TAG, "Couldn't even speak the error narration", it) }
     }
 
