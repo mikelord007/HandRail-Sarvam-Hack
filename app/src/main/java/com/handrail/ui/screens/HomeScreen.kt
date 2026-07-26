@@ -63,6 +63,7 @@ fun HomeScreen(
     onDraftChange: (String) -> Unit,
     isRecording: Boolean,
     isTranscribing: Boolean,
+    isThinking: Boolean,
     onMicTap: () -> Unit,
     onSuggestionTap: (String) -> Unit,
     onSend: () -> Unit,
@@ -110,7 +111,7 @@ fun HomeScreen(
             Spacer(Modifier.height(26.dp))
 
             Kicker(
-                text = homeCaption(isRecording, isTranscribing, language),
+                text = homeCaption(isRecording, isTranscribing, isThinking, language),
                 fontSize = 14.sp,
                 letterSpacing = 0.2.em,
             )
@@ -148,9 +149,10 @@ fun HomeScreen(
     }
 }
 
-private fun homeCaption(isRecording: Boolean, isTranscribing: Boolean, language: Language): String = when {
+private fun homeCaption(isRecording: Boolean, isTranscribing: Boolean, isThinking: Boolean, language: Language): String = when {
     isRecording -> "Listening…"
     isTranscribing -> "Transcribing…"
+    isThinking -> "Thinking…"
     else -> "Tap and speak · ${language.nativeName}"
 }
 

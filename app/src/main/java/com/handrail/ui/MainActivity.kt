@@ -21,8 +21,11 @@ import com.handrail.chat.ChatEntry
 import com.handrail.chat.ChatHistoryStore
 import com.handrail.chat.ChatStatus
 import com.handrail.chat.ChatTurn
+import com.handrail.sarvam.ChatMessage
+import com.handrail.sarvam.LlmClient
 import com.handrail.speech.AudioRecorder
 import com.handrail.speech.BulbulClient
+import com.handrail.speech.ErrorPhrases
 import com.handrail.speech.Language
 import com.handrail.speech.NarrationPlayer
 import com.handrail.speech.SaarasClient
@@ -48,6 +51,11 @@ import kotlinx.coroutines.launch
 
 private const val TAG = "MainActivity"
 
+/** Plain conversation only — no tool calls, no screen actions. Takeover mode lives in AssistActivity, reached only via the real ASSIST invocation. */
+private val CHAT_SYSTEM_PROMPT = """
+    You are Handrail, a friendly voice assistant. Reply conversationally in %LANGUAGE%, in one to three short spoken sentences. No markdown, no lists. You cannot see the user's screen or perform actions on their phone from this conversation — if asked to do something on-screen, tell them to long-press their home button to invoke you as their assistant on that screen.
+""".trimIndent()
+
 /**
  * Hosts every screen except the translucent assist overlay (that's
  * [AssistActivity] — see [Screen]'s class doc for why they're separate).
@@ -61,12 +69,14 @@ class MainActivity : ComponentActivity() {
     private val audioRecorder by lazy { AudioRecorder(applicationContext) }
     private val saarasClient = SaarasClient()
     private val bulbulClient = BulbulClient()
+    private val llmClient = LlmClient()
     private val narrationPlayer by lazy { NarrationPlayer(applicationContext) }
 
     private var entries by mutableStateOf<List<ChatEntry>>(emptyList())
     private var draft by mutableStateOf("")
     private var isRecording by mutableStateOf(false)
     private var isTranscribing by mutableStateOf(false)
+    private var isThinking by mutableStateOf(false)
 
     private var selectedLanguage by mutableStateOf(SupportedLanguages.DEFAULT)
     private var selectedSpeaker by mutableStateOf(Speakers.DEFAULT)
@@ -145,6 +155,7 @@ class MainActivity : ComponentActivity() {
                         onDraftChange = { draft = it },
                         isRecording = isRecording,
                         isTranscribing = isTranscribing,
+                        isThinking = isThinking,
                         onMicTap = ::onMicToggle,
                         onSuggestionTap = ::submitTask,
                         onSend = ::onSend,
@@ -199,38 +210,51 @@ class MainActivity : ComponentActivity() {
     }
 
     /**
-     * If the newest entry is awaiting an ask_user answer, this submission
-     * resumes that SAME task instead of starting a fresh one with no memory
-     * of the question — see AssistActivity.pendingAgentContext for the
-     * spoken-answer equivalent of this same rule.
+     * A plain, spoken conversation turn — no overlay, no agent tool-calling.
+     * The translucent takeover/narration overlay ([AssistActivity]) is
+     * reserved for the real ASSIST invocation (long-press home) over
+     * whatever app/screen is in the foreground at the time; chatting on
+     * Handrail's own Home screen never leaves this Activity.
      */
     private fun submitTask(userText: String) {
-        val last = entries.maxByOrNull { it.timestamp }
-        val resuming = last != null && last.status == ChatStatus.ASK_USER
-
-        val entry = if (resuming) {
-            last!!.copy(turns = last.turns + ChatTurn("user", userText), status = ChatStatus.RUNNING)
-        } else {
-            ChatEntry(
-                id = UUID.randomUUID().toString(),
-                task = userText,
-                timestamp = System.currentTimeMillis(),
-                turns = listOf(ChatTurn("user", userText)),
-                status = ChatStatus.RUNNING,
-            )
-        }
+        val entry = ChatEntry(
+            id = UUID.randomUUID().toString(),
+            task = userText,
+            timestamp = System.currentTimeMillis(),
+            turns = listOf(ChatTurn("user", userText)),
+            status = ChatStatus.RUNNING,
+        )
         chatHistoryStore.upsert(entry)
         reloadHistory()
 
-        val effectiveTask = if (resuming) last!!.task else userText
-        val effectiveHistory = if (resuming) last!!.agentHistory + "User answered: $userText" else emptyList()
+        isThinking = true
+        lifecycleScope.launch {
+            val v = voicePreferences.settings
+            val systemPrompt = CHAT_SYSTEM_PROMPT.replace("%LANGUAGE%", v.language.displayName)
+            val result = llmClient.chatCompletion(
+                messages = listOf(
+                    ChatMessage(role = "system", content = systemPrompt),
+                    ChatMessage(role = "user", content = userText),
+                ),
+            )
+            isThinking = false
 
-        val intent = Intent(this, AssistActivity::class.java).apply {
-            putExtra(AssistActivity.EXTRA_AGENT_TASK, effectiveTask)
-            putExtra(AssistActivity.EXTRA_CHAT_ID, entry.id)
-            putStringArrayListExtra(AssistActivity.EXTRA_AGENT_HISTORY, ArrayList(effectiveHistory))
+            val replyText = result.getOrNull()?.choices?.firstOrNull()?.message?.content?.trim().orEmpty()
+            if (result.isFailure || replyText.isEmpty()) {
+                Log.e(TAG, "Chat reply failed", result.exceptionOrNull())
+                chatHistoryStore.upsert(entry.copy(status = ChatStatus.ERROR))
+                reloadHistory()
+                val audio = bulbulClient.synthesize(ErrorPhrases.couldNotDoThat(v.language.code), v.language.code, v.speaker.id, v.pace)
+                audio.onSuccess { narrationPlayer.play(it) }
+                return@launch
+            }
+
+            chatHistoryStore.upsert(entry.copy(turns = entry.turns + ChatTurn("assistant", replyText), status = ChatStatus.DONE))
+            reloadHistory()
+
+            val audio = bulbulClient.synthesize(replyText, v.language.code, v.speaker.id, v.pace)
+            audio.onSuccess { narrationPlayer.play(it) }
         }
-        startActivity(intent)
     }
 
     // --- Voice input alternative ---
