@@ -14,8 +14,8 @@ import com.handrail.speech.VoiceSettings
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 
-/** Why the loop stopped with [AgentEvent.Blocked] — the hand-back UI only shows the gold card for [IRREVERSIBLE_GUARD]; the other three are failures. */
-enum class BlockCause { IRREVERSIBLE_GUARD, MODEL_DECLARED, STEP_BUDGET, MALFORMED_OUTPUT }
+/** Why the loop stopped with [AgentEvent.Blocked] — the hand-back UI only shows the gold card for [IRREVERSIBLE_GUARD]; the rest are failures. */
+enum class BlockCause { IRREVERSIBLE_GUARD, MODEL_DECLARED, STEP_BUDGET, MALFORMED_OUTPUT, NO_PROGRESS }
 
 sealed interface AgentEvent {
     data class Step(val index: Int, val description: String) : AgentEvent
@@ -63,6 +63,14 @@ class AgentLoop(
     suspend fun run(task: String, initialHistory: List<String> = emptyList(), onEvent: (AgentEvent) -> Unit) {
         val history = initialHistory.toMutableList()
 
+        // Tracks whether the screen is actually changing step to step. A weak
+        // model with no screen-grounding VLM will happily scroll/tap the same
+        // dead end over and over (observed burning the full 12-step budget
+        // repeating "scrolling up/down" with the perceived screen byte-for-byte
+        // identical every time) — this is the circuit breaker for that.
+        var previousSerialized: String? = null
+        var noProgressStreak = 0
+
         for (step in 1..MAX_STEPS) {
             var perception = service.captureScreen(goHomeIfEmpty = step == 1)
             // A window with zero actionable elements after step 1 is usually
@@ -78,6 +86,31 @@ class AgentLoop(
                 val message = ErrorPhrases.couldNotDoThat(language.code)
                 speak(message)
                 onEvent(AgentEvent.Error(message))
+                return
+            }
+
+            // Tell the model directly when its last action didn't visibly do
+            // anything — a weak model needs this spelled out in HISTORY, it
+            // won't infer "screen unchanged" from an ActionResult.Success on
+            // its own (a scroll at the end of a list, or a tap that landed on
+            // the wrong node, both report Success despite doing nothing).
+            val screenChanged = previousSerialized == null || perception.serialized != previousSerialized
+            if (previousSerialized != null) {
+                if (screenChanged) {
+                    noProgressStreak = 0
+                } else {
+                    noProgressStreak++
+                    if (history.isNotEmpty()) {
+                        history[history.lastIndex] = history.last() + " — screen did not change, this had no visible effect"
+                    }
+                }
+            }
+            previousSerialized = perception.serialized
+
+            if (noProgressStreak >= MAX_NO_PROGRESS_STREAK) {
+                val message = ErrorPhrases.stoppedForYou(language.code)
+                speak(message)
+                onEvent(AgentEvent.Blocked(message, BlockCause.NO_PROGRESS))
                 return
             }
 
@@ -222,6 +255,9 @@ class AgentLoop(
         const val MAX_MALFORMED_RETRIES = 2
         const val MAX_EMPTY_SCREEN_RETRIES = 3
 
+        /** 3 consecutive steps with zero visible effect means the model is stuck repeating a dead action — bail rather than burn the rest of [MAX_STEPS]. */
+        const val MAX_NO_PROGRESS_STREAK = 3
+
         val AGENT_SYSTEM_PROMPT = """
             You are Handrail, an agent that completes a task on an Android phone on behalf of a user, by looking at the current screen and choosing ONE next action at a time.
 
@@ -248,6 +284,7 @@ class AgentLoop(
             - Use "done" as soon as the current SCREEN already shows what the task asked for — e.g. if asked to open a settings page and that page is now on screen, call "done" immediately rather than tapping anything else on it.
             - Do not use "ask_user" just to confirm a plan before starting — only ask when you're genuinely unsure which ref to use, or the task itself is ambiguous. If the task is clear (e.g. "open YouTube and play a specific video"), just start doing it; narrate each step via "say" so the user can stop you if they don't like where it's going.
             - If you already asked the user something (see HISTORY) and they replied, do not ask again — act on their answer.
+            - If a HISTORY line ends with "screen did not change, this had no visible effect", that exact action just failed silently — do NOT repeat it. Look for a different element (e.g. a search box, a menu, an "all apps" icon), or call "blocked" if nothing on THIS screen can get you further. Repeating the same scroll or tap after seeing this note is always wrong.
 
             Example:
             SCREEN:
