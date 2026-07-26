@@ -10,11 +10,13 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.handrail.R
 import com.handrail.ui.components.CtaButton
 import com.handrail.ui.components.Hairline
 import com.handrail.ui.components.StepHeader
@@ -32,26 +34,26 @@ fun AccessibilityScreen(onOpenSettings: () -> Unit, onBack: () -> Unit) {
         StepHeader(step = 4, onBack = onBack)
 
         Text(
-            text = "Let me read the screen",
+            text = stringResource(R.string.a11y_screen_title),
             style = TextStyle(fontFamily = HandrailType.Cormorant, fontSize = 36.sp, lineHeight = 41.sp),
             color = HandrailColors.Text,
         )
         Text(
-            text = "Handrail is an accessibility service. It reads the labels on your screen — never pictures, never your keyboard.",
+            text = stringResource(R.string.a11y_screen_body),
             modifier = Modifier.padding(top = 12.dp, bottom = 22.dp),
             style = TextStyle(fontFamily = HandrailType.Lora, fontSize = 16.5.sp, lineHeight = 28.sp),
             color = HandrailColors.Neutral800,
         )
 
         Hairline()
-        TableRow(text = "Reads button and text labels")
-        TableRow(text = "Taps and types on your behalf")
-        TableRow(text = "Never takes screenshots or photos", muted = true)
+        TableRow(text = stringResource(R.string.a11y_row_1))
+        TableRow(text = stringResource(R.string.a11y_row_2))
+        TableRow(text = stringResource(R.string.a11y_row_3), muted = true)
 
         Spacer(Modifier.weight(1f))
-        CtaButton(text = "Open Android settings", onClick = onOpenSettings)
+        CtaButton(text = stringResource(R.string.open_android_settings), onClick = onOpenSettings)
         Text(
-            text = "Settings → Accessibility → Handrail → On",
+            text = stringResource(R.string.a11y_settings_path),
             modifier = Modifier.padding(top = 12.dp).fillMaxWidth(),
             style = TextStyle(
                 fontFamily = HandrailType.Lora,

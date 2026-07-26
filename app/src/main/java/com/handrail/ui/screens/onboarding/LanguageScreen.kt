@@ -9,10 +9,12 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.handrail.R
 import com.handrail.speech.Language
 import com.handrail.ui.components.LanguageRow
 import com.handrail.ui.components.CtaButton
@@ -37,12 +39,12 @@ fun LanguageScreen(
         StepHeader(step = 1, onBack = onBack)
 
         Text(
-            text = "Which language should I speak?",
+            text = stringResource(R.string.language_screen_title),
             style = TextStyle(fontFamily = HandrailType.Cormorant, fontSize = 34.sp, lineHeight = 39.sp),
             color = HandrailColors.Text,
         )
         Text(
-            text = "I'll listen in this language too. Change it any time in settings.",
+            text = stringResource(R.string.language_screen_body),
             modifier = Modifier.padding(top = 8.dp, bottom = 16.dp),
             style = TextStyle(fontFamily = HandrailType.Lora, fontSize = 15.5.sp, lineHeight = 26.sp),
             color = HandrailColors.Neutral700,
@@ -55,12 +57,12 @@ fun LanguageScreen(
         }
 
         Text(
-            text = "${languages.size} languages · more as Sarvam adds them",
+            text = stringResource(R.string.language_screen_count, languages.size),
             modifier = Modifier.padding(vertical = 12.dp),
             style = TextStyle(fontFamily = HandrailType.Lora, fontSize = 13.5.sp, fontStyle = FontStyle.Italic),
             color = HandrailColors.Neutral600,
         )
 
-        CtaButton(text = "Continue", onClick = onContinue)
+        CtaButton(text = stringResource(R.string.continue_label), onClick = onContinue)
     }
 }

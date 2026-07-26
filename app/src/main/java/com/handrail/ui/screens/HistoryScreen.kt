@@ -24,11 +24,14 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.pluralStringResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.em
 import androidx.compose.ui.unit.sp
+import com.handrail.R
 import com.handrail.agent.BlockCause
 import com.handrail.chat.ChatEntry
 import com.handrail.chat.ChatStatus
@@ -67,16 +70,16 @@ fun HistoryScreen(entries: List<ChatEntry>, onBack: () -> Unit, onOpenThread: (S
                 modifier = Modifier.size(32.dp).clickable(onClick = onBack),
                 contentAlignment = Alignment.CenterStart,
             ) {
-                Icon(imageVector = HandrailIcons.ArrowLeft, contentDescription = "Back", tint = HandrailColors.Neutral700, modifier = Modifier.size(20.dp))
+                Icon(imageVector = HandrailIcons.ArrowLeft, contentDescription = stringResource(R.string.back), tint = HandrailColors.Neutral700, modifier = Modifier.size(20.dp))
             }
-            Kicker(text = "History", fontSize = 15.sp, letterSpacing = 0.2.em)
+            Kicker(text = stringResource(R.string.history_title), fontSize = 15.sp, letterSpacing = 0.2.em)
             Spacer(Modifier.width(32.dp))
         }
         Hairline()
 
         Row(modifier = Modifier.fillMaxWidth()) {
-            HistoryTabButton(text = "Tasks", active = tab == HistoryTab.Tasks, modifier = Modifier.weight(1f)) { tab = HistoryTab.Tasks }
-            HistoryTabButton(text = "Conversations", active = tab == HistoryTab.Conversations, modifier = Modifier.weight(1f)) { tab = HistoryTab.Conversations }
+            HistoryTabButton(text = stringResource(R.string.tab_tasks), active = tab == HistoryTab.Tasks, modifier = Modifier.weight(1f)) { tab = HistoryTab.Tasks }
+            HistoryTabButton(text = stringResource(R.string.tab_conversations), active = tab == HistoryTab.Conversations, modifier = Modifier.weight(1f)) { tab = HistoryTab.Conversations }
         }
 
         val rows = if (tab == HistoryTab.Tasks) sorted else conversations
@@ -139,27 +142,30 @@ private fun HistoryRow(title: String, time: String, note: String, onClick: () ->
     }
 }
 
+@Composable
 private fun taskNote(entry: ChatEntry): String {
-    if (entry.kind == EntryKind.NARRATION) return "Narrated the screen"
+    if (entry.kind == EntryKind.NARRATION) return stringResource(R.string.note_narrated)
     return when (entry.status) {
-        ChatStatus.RUNNING -> "In progress"
-        ChatStatus.ASK_USER -> "Waiting for your answer"
-        ChatStatus.DONE -> if (entry.stepCount > 0) "${entry.stepCount} steps" else "Done"
+        ChatStatus.RUNNING -> stringResource(R.string.note_in_progress)
+        ChatStatus.ASK_USER -> stringResource(R.string.note_waiting_answer)
+        ChatStatus.DONE -> if (entry.stepCount > 0) pluralStringResource(R.plurals.steps_count, entry.stepCount, entry.stepCount) else stringResource(R.string.note_done)
         ChatStatus.BLOCKED -> when (entry.blockCause) {
             BlockCause.IRREVERSIBLE_GUARD -> {
-                val stepsPart = if (entry.stepCount > 0) "${entry.stepCount} steps · " else ""
-                "${stepsPart}handed back at \"${entry.handbackLabel}\""
+                val stepsPart = if (entry.stepCount > 0) pluralStringResource(R.plurals.steps_count, entry.stepCount, entry.stepCount) + " · " else ""
+                stepsPart + stringResource(R.string.note_handback_at, entry.handbackLabel ?: "")
             }
-            else -> "Stopped — ${lastAssistantText(entry)}"
+            else -> stringResource(R.string.note_stopped, lastAssistantText(entry))
         }
-        ChatStatus.ERROR -> "Couldn't finish — ${lastAssistantText(entry)}"
+        ChatStatus.ERROR -> stringResource(R.string.note_couldnt_finish, lastAssistantText(entry))
     }
 }
 
+@Composable
 private fun conversationNote(entry: ChatEntry): String {
     val replies = entry.turns.count { it.role == "assistant" }
-    return "\"${entry.task}\" → $replies ${if (replies == 1) "reply" else "replies"}"
+    return stringResource(R.string.conversation_note, entry.task, pluralStringResource(R.plurals.replies_count, replies, replies))
 }
 
+@Composable
 private fun lastAssistantText(entry: ChatEntry): String =
-    entry.turns.lastOrNull { it.role == "assistant" }?.text?.take(60) ?: "unknown reason"
+    entry.turns.lastOrNull { it.role == "assistant" }?.text?.take(60) ?: stringResource(R.string.unknown_reason)

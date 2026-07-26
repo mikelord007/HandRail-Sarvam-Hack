@@ -31,24 +31,27 @@ import androidx.compose.ui.graphics.StrokeCap
 import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.graphics.drawscope.rotate
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.em
 import androidx.compose.ui.unit.sp
+import com.handrail.R
 import com.handrail.ui.theme.HandrailColors
 import com.handrail.ui.theme.HandrailType
 
 /** The agent's five perceivable states, shared by the assist overlay and (later) the home mic control. */
 enum class VoiceState { Idle, Listening, Thinking, Speaking, Acting }
 
-private val StateLabels = mapOf(
-    VoiceState.Idle to "Ready",
-    VoiceState.Listening to "Listening",
-    VoiceState.Thinking to "Thinking",
-    VoiceState.Speaking to "Speaking",
-    VoiceState.Acting to "Acting",
-)
+@Composable
+private fun stateLabel(state: VoiceState): String = when (state) {
+    VoiceState.Idle -> stringResource(R.string.state_ready)
+    VoiceState.Listening -> stringResource(R.string.state_listening)
+    VoiceState.Thinking -> stringResource(R.string.state_thinking)
+    VoiceState.Speaking -> stringResource(R.string.state_speaking)
+    VoiceState.Acting -> stringResource(R.string.state_acting)
+}
 
 /** CSS `ease-out`, i.e. cubic-bezier(0, 0, 0.58, 1) — used by the ring and breathe animations in the prototype. */
 private val EaseOut = CubicBezierEasing(0f, 0f, 0.58f, 1f)
@@ -73,7 +76,7 @@ fun VoiceStateIndicator(
     ) {
         VoiceStateMark(state = state, size = markSize, onDark = onDark)
         Text(
-            text = (StateLabels[state] ?: "").uppercase(),
+            text = stateLabel(state).uppercase(),
             style = TextStyle(fontFamily = HandrailType.Cormorant, fontSize = 14.sp, letterSpacing = 0.2.em),
             color = if (onDark) HandrailColors.Accent300 else HandrailColors.Accent700,
         )

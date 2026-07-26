@@ -1,6 +1,148 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources>
-    <string name="app_name">Handrail</string>
+<resources xmlns:tools="http://schemas.android.com/tools">
+    <!-- Brand name — deliberately identical in every locale, never translated. -->
+    <string name="app_name" translatable="false">Handrail</string>
     <string name="accessibility_service_label">Handrail Screen Reader</string>
     <string name="accessibility_service_description">Lets Handrail read the current screen so it can narrate it or perform actions you ask for.</string>
+
+    <!-- Shared -->
+    <string name="back">Back</string>
+    <string name="cd_send">Send</string>
+    <string name="cd_close">Close</string>
+    <string name="cd_speak">Speak</string>
+    <string name="cd_history">History</string>
+    <string name="cd_settings">Settings</string>
+    <string name="step_of">Step %1$d of %2$d</string>
+    <string name="continue_label">Continue</string>
+    <string name="not_now">Not now</string>
+
+    <!-- Home -->
+    <string name="home_title">What should I do\nfor you?</string>
+    <string name="home_caption_listening">Listening…</string>
+    <string name="home_caption_transcribing">Transcribing…</string>
+    <string name="home_caption_thinking">Thinking…</string>
+    <string name="home_caption_tap_and_speak">Tap and speak · %1$s</string>
+    <string name="suggestion_book_cab">Book a cab home</string>
+    <string name="suggestion_read_screen">Read this screen to me</string>
+    <string name="suggestion_pay_bill">Pay the electricity bill</string>
+    <string name="home_text_placeholder">or type it instead</string>
+    <string name="earlier_today">Earlier today</string>
+    <string name="all">All</string>
+
+    <!-- Settings -->
+    <string name="settings_title">Settings</string>
+    <string name="language_section">Language</string>
+    <string name="settings_language_note">Speaking and listening both use %1$s.</string>
+    <string name="permissions_section">Permissions</string>
+    <string name="permission_accessibility">Accessibility service</string>
+    <string name="permission_microphone">Microphone</string>
+    <string name="permission_default_assistant">Default assistant</string>
+    <string name="pill_on">On</string>
+    <string name="pill_off">Off</string>
+    <string name="behavior_section">How I behave</string>
+    <string name="toggle_narrate_title">Narrate every step</string>
+    <string name="toggle_narrate_desc">Say the action before doing it</string>
+    <string name="toggle_handback_title">Always hand back before payment</string>
+    <string name="toggle_handback_desc">Locked on for the demo</string>
+    <string name="toggle_speak_slowly_title">Speak slowly</string>
+    <string name="toggle_speak_slowly_desc">Half speed, longer pauses</string>
+
+    <!-- History -->
+    <string name="history_title">History</string>
+    <string name="tab_tasks">Tasks</string>
+    <string name="tab_conversations">Conversations</string>
+    <string name="note_narrated">Narrated the screen</string>
+    <string name="note_in_progress">In progress</string>
+    <string name="note_waiting_answer">Waiting for your answer</string>
+    <string name="note_done">Done</string>
+    <string name="note_handback_at">handed back at \"%1$s\"</string>
+    <string name="note_stopped">Stopped — %1$s</string>
+    <string name="note_couldnt_finish">Couldn\'t finish — %1$s</string>
+    <string name="unknown_reason">unknown reason</string>
+    <string name="conversation_note">\"%1$s\" → %2$s</string>
+    <plurals name="steps_count">
+        <item quantity="one">%1$d step</item>
+        <item quantity="other">%1$d steps</item>
+    </plurals>
+    <plurals name="replies_count">
+        <item quantity="one">%1$d reply</item>
+        <item quantity="other">%1$d replies</item>
+    </plurals>
+    <string name="yesterday">Yesterday</string>
+
+    <!-- Thread detail -->
+    <string name="conversation_title">Conversation</string>
+    <string name="conversation_gone">This conversation is gone.</string>
+    <string name="you_label">You</string>
+
+    <!-- Handback -->
+    <string name="handback_kicker">I\'m stopping here</string>
+    <string name="handback_action_question">%1$s?</string>
+    <string name="handback_body">I was about to do this on your behalf. You\'ll need to complete it yourself.</string>
+    <string name="handback_footer">This one is yours to make. I won\'t tap it for you.</string>
+    <string name="handback_confirm_label">Yes — I\'ll do it myself</string>
+    <string name="handback_decline_label">No, stop</string>
+    <string name="handback_default_action_label">this</string>
+
+    <!-- Assist overlay / agent status -->
+    <string name="stop_label">Stop</string>
+    <string name="read_the_screen_task">Read the screen</string>
+    <string name="step_reading_screen">Reading the screen</string>
+    <string name="assist_a11y_not_enabled">Accessibility service is not enabled.</string>
+    <string name="assist_nothing_readable">Nothing readable on screen right now.</string>
+    <string name="assist_couldnt_reach_llm">Couldn\'t reach the language model.</string>
+    <string name="step_label_format">Step %1$d</string>
+    <string name="task_complete">Task complete</string>
+    <string name="tap_to_answer">Tap to answer</string>
+    <string name="state_ready">Ready</string>
+    <string name="state_listening">Listening</string>
+    <string name="state_thinking">Thinking</string>
+    <string name="state_speaking">Speaking</string>
+    <string name="state_acting">Acting</string>
+
+    <!-- Onboarding: Welcome -->
+    <string name="welcome_kicker">Hold on. I\'ll walk you through.</string>
+    <string name="welcome_body">Tell me what you want to do, in your language. I read the screen aloud, or I do the tapping for you — and I say every step before I take it.</string>
+    <string name="begin">Begin</string>
+    <string name="welcome_footer">Takes about a minute · four permissions</string>
+
+    <!-- Onboarding: Language -->
+    <string name="language_screen_title">Which language should I speak?</string>
+    <string name="language_screen_body">I\'ll listen in this language too. Change it any time in settings.</string>
+    <string name="language_screen_count" tools:ignore="PluralsCandidate">%1$d languages · more as Sarvam adds them</string>
+
+    <!-- Onboarding: Voice -->
+    <string name="voice_screen_title">Whose voice should I use?</string>
+    <string name="voice_screen_body">Tap one to hear it read a line back to you.</string>
+    <string name="onboarding_voice_sample_line">I found Ola. Opening it now.</string>
+    <string name="use_this_voice">Use this voice</string>
+
+    <!-- Onboarding: Mic -->
+    <string name="mic_screen_title">May I use the microphone?</string>
+    <string name="mic_screen_body">Only while you are talking to me. I don\'t listen in the background, and nothing is recorded after the task ends.</string>
+    <string name="mic_screen_note_prefix">Android will ask you next. Choose </string>
+    <string name="mic_screen_note_highlight">\"While using the app\".</string>
+    <string name="allow_microphone">Allow microphone</string>
+
+    <!-- Onboarding: Accessibility -->
+    <string name="a11y_screen_title">Let me read the screen</string>
+    <string name="a11y_screen_body">Handrail is an accessibility service. It reads the labels on your screen — never pictures, never your keyboard.</string>
+    <string name="a11y_row_1">Reads button and text labels</string>
+    <string name="a11y_row_2">Taps and types on your behalf</string>
+    <string name="a11y_row_3">Never takes screenshots or photos</string>
+    <string name="open_android_settings">Open Android settings</string>
+    <string name="a11y_settings_path">Settings → Accessibility → Handrail → On</string>
+
+    <!-- Onboarding: Assistant -->
+    <string name="assistant_screen_title">Hold the home button for me</string>
+    <string name="assistant_screen_body">Make Handrail your assistant, and a long press on home brings me up over whatever you\'re doing.</string>
+    <string name="set_as_assistant">Set as assistant</string>
+
+    <!-- Onboarding: Promise -->
+    <string name="my_promise">My promise</string>
+    <string name="promise_headline">I never spend your money.</string>
+    <string name="promise_body_prefix">I can open apps, fill forms and choose your ride. But before any payment, any send, any confirm — I stop, I say out loud what is about to happen, and </string>
+    <string name="promise_body_you">you</string>
+    <string name="promise_body_suffix"> make the last tap.</string>
+    <string name="promise_cta">I understand — let\'s go</string>
 </resources>

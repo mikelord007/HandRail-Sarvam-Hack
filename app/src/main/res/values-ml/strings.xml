@@ -1,0 +1,132 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="accessibility_service_label">Handrail സ്ക്രീൻ റീഡർ</string>
+    <string name="accessibility_service_description">നിലവിലെ സ്ക്രീൻ വായിക്കാൻ Handrail-നെ അനുവദിക്കുന്നു, അതിനാൽ അതിന് അത് വായിച്ചു കേൾപ്പിക്കാനോ നിങ്ങൾ ആവശ്യപ്പെടുന്ന കാര്യങ്ങൾ ചെയ്യാനോ കഴിയും.</string>
+
+    <string name="back">തിരികെ</string>
+    <string name="cd_send">അയയ്ക്കുക</string>
+    <string name="cd_close">അടയ്ക്കുക</string>
+    <string name="cd_speak">സംസാരിക്കുക</string>
+    <string name="cd_history">ചരിത്രം</string>
+    <string name="cd_settings">സെറ്റിംഗ്സ്</string>
+    <string name="step_of">ഘട്ടം %1$d, ആകെ %2$d ൽ</string>
+    <string name="continue_label">തുടരുക</string>
+    <string name="not_now">ഇപ്പോൾ വേണ്ട</string>
+
+    <string name="home_title">ഞാൻ നിങ്ങൾക്കായി\nഎന്ത് ചെയ്യണം?</string>
+    <string name="home_caption_listening">കേൾക്കുന്നു…</string>
+    <string name="home_caption_transcribing">എഴുതുന്നു…</string>
+    <string name="home_caption_thinking">ചിന്തിക്കുന്നു…</string>
+    <string name="home_caption_tap_and_speak">ടാപ്പ് ചെയ്ത് സംസാരിക്കുക · %1$s</string>
+    <string name="suggestion_book_cab">വീട്ടിലേക്ക് ക്യാബ് ബുക്ക് ചെയ്യുക</string>
+    <string name="suggestion_read_screen">ഈ സ്ക്രീൻ എനിക്ക് വായിച്ചു തരൂ</string>
+    <string name="suggestion_pay_bill">വൈദ്യുതി ബിൽ അടയ്ക്കുക</string>
+    <string name="home_text_placeholder">അല്ലെങ്കിൽ പകരം ടൈപ്പ് ചെയ്യുക</string>
+    <string name="earlier_today">ഇന്ന് നേരത്തെ</string>
+    <string name="all">എല്ലാം</string>
+
+    <string name="settings_title">സെറ്റിംഗ്സ്</string>
+    <string name="language_section">ഭാഷ</string>
+    <string name="settings_language_note">സംസാരിക്കാനും കേൾക്കാനും രണ്ടിനും %1$s ഉപയോഗിക്കുന്നു.</string>
+    <string name="permissions_section">അനുമതികൾ</string>
+    <string name="permission_accessibility">ആക്‌സെസിബിലിറ്റി സേവനം</string>
+    <string name="permission_microphone">മൈക്രോഫോൺ</string>
+    <string name="permission_default_assistant">ഡിഫോൾട്ട് അസിസ്റ്റന്റ്</string>
+    <string name="pill_on">ഓൺ</string>
+    <string name="pill_off">ഓഫ്</string>
+    <string name="behavior_section">ഞാൻ എങ്ങനെ പെരുമാറും</string>
+    <string name="toggle_narrate_title">ഓരോ ഘട്ടവും പറയുക</string>
+    <string name="toggle_narrate_desc">ചെയ്യുന്നതിന് മുൻപ് അത് പറയുക</string>
+    <string name="toggle_handback_title">പണമടയ്ക്കുന്നതിന് മുൻപ് എപ്പോഴും തിരികെ ഏൽപ്പിക്കുക</string>
+    <string name="toggle_handback_desc">ഡെമോയ്ക്കായി ലോക്ക് ചെയ്തിരിക്കുന്നു</string>
+    <string name="toggle_speak_slowly_title">പതുക്കെ സംസാരിക്കുക</string>
+    <string name="toggle_speak_slowly_desc">പകുതി വേഗത, കൂടുതൽ ഇടവേളകൾ</string>
+
+    <string name="history_title">ചരിത്രം</string>
+    <string name="tab_tasks">ജോലികൾ</string>
+    <string name="tab_conversations">സംഭാഷണങ്ങൾ</string>
+    <string name="note_narrated">സ്ക്രീൻ വായിച്ചു കേൾപ്പിച്ചു</string>
+    <string name="note_in_progress">നടക്കുന്നു</string>
+    <string name="note_waiting_answer">നിങ്ങളുടെ ഉത്തരത്തിനായി കാത്തിരിക്കുന്നു</string>
+    <string name="note_done">പൂർത്തിയായി</string>
+    <string name="note_handback_at">\"%1$s\" ൽ തിരികെ ഏൽപ്പിച്ചു</string>
+    <string name="note_stopped">നിർത്തി — %1$s</string>
+    <string name="note_couldnt_finish">പൂർത്തിയാക്കാൻ കഴിഞ്ഞില്ല — %1$s</string>
+    <string name="unknown_reason">അജ്ഞാത കാരണം</string>
+    <string name="conversation_note">\"%1$s\" → %2$s</string>
+    <plurals name="steps_count">
+        <item quantity="one">%1$d ഘട്ടം</item>
+        <item quantity="other">%1$d ഘട്ടങ്ങൾ</item>
+    </plurals>
+    <plurals name="replies_count">
+        <item quantity="one">%1$d മറുപടി</item>
+        <item quantity="other">%1$d മറുപടികൾ</item>
+    </plurals>
+    <string name="yesterday">ഇന്നലെ</string>
+
+    <string name="conversation_title">സംഭാഷണം</string>
+    <string name="conversation_gone">ഈ സംഭാഷണം ഇനി ലഭ്യമല്ല.</string>
+    <string name="you_label">നിങ്ങൾ</string>
+
+    <string name="handback_kicker">ഞാൻ ഇവിടെ നിർത്തുന്നു</string>
+    <string name="handback_action_question">%1$s?</string>
+    <string name="handback_body">ഞാൻ ഇത് നിങ്ങൾക്കു വേണ്ടി ചെയ്യാൻ പോകുകയായിരുന്നു. ഇനി നിങ്ങൾ തന്നെ ഇത് പൂർത്തിയാക്കണം.</string>
+    <string name="handback_footer">ഇത് നിങ്ങൾ എടുക്കേണ്ട തീരുമാനമാണ്. ഞാൻ ഇത് നിങ്ങൾക്കായി ടാപ്പ് ചെയ്യില്ല.</string>
+    <string name="handback_confirm_label">അതെ — ഞാൻ തന്നെ ചെയ്യാം</string>
+    <string name="handback_decline_label">വേണ്ട, നിർത്തൂ</string>
+    <string name="handback_default_action_label">ഇത്</string>
+
+    <string name="stop_label">നിർത്തുക</string>
+    <string name="read_the_screen_task">സ്ക്രീൻ വായിക്കുക</string>
+    <string name="step_reading_screen">സ്ക്രീൻ വായിക്കുന്നു</string>
+    <string name="assist_a11y_not_enabled">ആക്‌സെസിബിലിറ്റി സേവനം ഓൺ അല്ല.</string>
+    <string name="assist_nothing_readable">ഇപ്പോൾ സ്ക്രീനിൽ വായിക്കാൻ ഒന്നുമില്ല.</string>
+    <string name="assist_couldnt_reach_llm">ഭാഷാ മോഡലിനെ ബന്ധപ്പെടാൻ കഴിഞ്ഞില്ല.</string>
+    <string name="step_label_format">ഘട്ടം %1$d</string>
+    <string name="task_complete">ജോലി പൂർത്തിയായി</string>
+    <string name="tap_to_answer">മറുപടി നൽകാൻ ടാപ്പ് ചെയ്യുക</string>
+    <string name="state_ready">തയ്യാർ</string>
+    <string name="state_listening">കേൾക്കുന്നു</string>
+    <string name="state_thinking">ചിന്തിക്കുന്നു</string>
+    <string name="state_speaking">സംസാരിക്കുന്നു</string>
+    <string name="state_acting">ചെയ്യുന്നു</string>
+
+    <string name="welcome_kicker">ഒന്ന് നിൽക്കൂ. ഞാൻ നിങ്ങളെ കൂടെ കൊണ്ടുപോകാം.</string>
+    <string name="welcome_body">നിങ്ങൾക്ക് എന്ത് ചെയ്യണമെന്ന് നിങ്ങളുടെ ഭാഷയിൽ പറയൂ. ഞാൻ സ്ക്രീൻ ഉറക്കെ വായിക്കും, അല്ലെങ്കിൽ നിങ്ങൾക്കായി ടാപ്പ് ചെയ്യും — ഓരോ ഘട്ടവും ചെയ്യുന്നതിന് മുൻപ് ഞാൻ അത് പറയും.</string>
+    <string name="begin">തുടങ്ങുക</string>
+    <string name="welcome_footer">ഏകദേശം ഒരു മിനിറ്റ് എടുക്കും · നാല് അനുമതികൾ</string>
+
+    <string name="language_screen_title">ഞാൻ ഏത് ഭാഷയിൽ സംസാരിക്കണം?</string>
+    <string name="language_screen_body">ഞാൻ ഇതേ ഭാഷയിൽ കേൾക്കും കൂടി. ഇത് സെറ്റിംഗ്സിൽ എപ്പോൾ വേണമെങ്കിലും മാറ്റാം.</string>
+    <string name="language_screen_count">%1$d ഭാഷകൾ · Sarvam കൂടുതൽ ചേർക്കും</string>
+
+    <string name="voice_screen_title">ഞാൻ ആരുടെ ശബ്ദം ഉപയോഗിക്കണം?</string>
+    <string name="voice_screen_body">ഒന്നിൽ ടാപ്പ് ചെയ്ത് അത് ഒരു വരി വായിക്കുന്നത് കേൾക്കൂ.</string>
+    <string name="onboarding_voice_sample_line">എനിക്ക് Ola കിട്ടി. ഇപ്പോൾ തുറക്കുന്നു.</string>
+    <string name="use_this_voice">ഈ ശബ്ദം ഉപയോഗിക്കുക</string>
+
+    <string name="mic_screen_title">എനിക്ക് മൈക്രോഫോൺ ഉപയോഗിക്കാമോ?</string>
+    <string name="mic_screen_body">നിങ്ങൾ എന്നോട് സംസാരിക്കുമ്പോൾ മാത്രം. ഞാൻ പശ്ചാത്തലത്തിൽ കേൾക്കില്ല, ജോലി കഴിഞ്ഞാൽ ഒന്നും റെക്കോർഡ് ചെയ്യപ്പെടില്ല.</string>
+    <string name="mic_screen_note_prefix">Android അടുത്തതായി നിങ്ങളോട് ചോദിക്കും. തിരഞ്ഞെടുക്കുക </string>
+    <string name="mic_screen_note_highlight">\"ആപ്പ് ഉപയോഗിക്കുമ്പോൾ\".</string>
+    <string name="allow_microphone">മൈക്രോഫോൺ അനുവദിക്കുക</string>
+
+    <string name="a11y_screen_title">എന്നെ സ്ക്രീൻ വായിക്കാൻ അനുവദിക്കൂ</string>
+    <string name="a11y_screen_body">Handrail ഒരു ആക്‌സെസിബിലിറ്റി സേവനമാണ്. ഇത് നിങ്ങളുടെ സ്ക്രീനിലെ ലേബലുകൾ വായിക്കുന്നു — ഒരിക്കലും ചിത്രങ്ങളല്ല, ഒരിക്കലും നിങ്ങളുടെ കീബോർഡ് അല്ല.</string>
+    <string name="a11y_row_1">ബട്ടണും ടെക്സ്റ്റ് ലേബലുകളും വായിക്കുന്നു</string>
+    <string name="a11y_row_2">നിങ്ങൾക്കു വേണ്ടി ടാപ്പ് ചെയ്യുകയും ടൈപ്പ് ചെയ്യുകയും ചെയ്യുന്നു</string>
+    <string name="a11y_row_3">ഒരിക്കലും സ്ക്രീൻഷോട്ടോ ഫോട്ടോയോ എടുക്കില്ല</string>
+    <string name="open_android_settings">Android സെറ്റിംഗ്സ് തുറക്കുക</string>
+    <string name="a11y_settings_path">സെറ്റിംഗ്സ് → ആക്‌സെസിബിലിറ്റി → Handrail → ഓൺ</string>
+
+    <string name="assistant_screen_title">എനിക്കായി ഹോം ബട്ടൺ അമർത്തിപ്പിടിക്കൂ</string>
+    <string name="assistant_screen_body">Handrail-നെ നിങ്ങളുടെ അസിസ്റ്റന്റാക്കൂ, അപ്പോൾ ഹോം ബട്ടൺ അമർത്തിപ്പിടിക്കുമ്പോൾ നിങ്ങൾ എന്ത് ചെയ്യുകയാണെങ്കിലും അതിനു മുകളിൽ ഞാൻ വരും.</string>
+    <string name="set_as_assistant">അസിസ്റ്റന്റായി സജ്ജമാക്കുക</string>
+
+    <string name="my_promise">എന്റെ വാഗ്ദാനം</string>
+    <string name="promise_headline">ഞാൻ ഒരിക്കലും നിങ്ങളുടെ പണം ചെലവഴിക്കില്ല.</string>
+    <string name="promise_body_prefix">എനിക്ക് ആപ്പുകൾ തുറക്കാം, ഫോമുകൾ പൂരിപ്പിക്കാം, നിങ്ങളുടെ റൈഡ് തിരഞ്ഞെടുക്കാം. പക്ഷേ ഏതെങ്കിലും പേയ്‌മെന്റ്, അയക്കൽ, സ്ഥിരീകരണത്തിന് മുൻപ് — ഞാൻ നിർത്തും, എന്താണ് സംഭവിക്കാൻ പോകുന്നതെന്ന് ഉറക്കെ പറയും, കൂടാതെ </string>
+    <string name="promise_body_you">നിങ്ങൾ</string>
+    <string name="promise_body_suffix"> അവസാന ടാപ്പ് ചെയ്യുന്നു.</string>
+    <string name="promise_cta">എനിക്ക് മനസ്സിലായി — നമുക്ക് പോകാം</string>
+</resources>

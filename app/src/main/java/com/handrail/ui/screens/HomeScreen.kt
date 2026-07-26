@@ -33,11 +33,13 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.drawscope.Stroke
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.em
 import androidx.compose.ui.unit.sp
+import com.handrail.R
 import com.handrail.chat.ChatEntry
 import com.handrail.chat.ChatStatus
 import com.handrail.speech.Language
@@ -79,9 +81,9 @@ fun HomeScreen(
             horizontalArrangement = Arrangement.SpaceBetween,
             verticalAlignment = Alignment.CenterVertically,
         ) {
-            HeaderIconButton(icon = HandrailIcons.Menu, contentDescription = "History", onClick = onOpenHistory)
-            Kicker(text = "Handrail", fontSize = 15.sp, letterSpacing = 0.2.em)
-            HeaderIconButton(icon = HandrailIcons.SlidersHorizontal, contentDescription = "Settings", onClick = onOpenSettings)
+            HeaderIconButton(icon = HandrailIcons.Menu, contentDescription = stringResource(R.string.cd_history), onClick = onOpenHistory)
+            Kicker(text = stringResource(R.string.app_name), fontSize = 15.sp, letterSpacing = 0.2.em)
+            HeaderIconButton(icon = HandrailIcons.SlidersHorizontal, contentDescription = stringResource(R.string.cd_settings), onClick = onOpenSettings)
         }
 
         Column(
@@ -93,7 +95,7 @@ fun HomeScreen(
             verticalArrangement = Arrangement.Center,
         ) {
             Text(
-                text = "What should I do\nfor you?",
+                text = stringResource(R.string.home_title),
                 style = TextStyle(
                     fontFamily = HandrailType.Cormorant,
                     fontSize = 30.sp,
@@ -120,11 +122,14 @@ fun HomeScreen(
 
             // Design wraps these in a centered flex row; stacked here to avoid
             // pulling in the experimental FlowRow API for three fixed strings.
-            SuggestionChip(text = "Book a cab home", onClick = { onSuggestionTap("Book a cab home") })
+            val bookCab = stringResource(R.string.suggestion_book_cab)
+            val readScreen = stringResource(R.string.suggestion_read_screen)
+            val payBill = stringResource(R.string.suggestion_pay_bill)
+            SuggestionChip(text = bookCab, onClick = { onSuggestionTap(bookCab) })
             Spacer(Modifier.height(8.dp))
-            SuggestionChip(text = "Read this screen to me", onClick = { onSuggestionTap("Read this screen to me") })
+            SuggestionChip(text = readScreen, onClick = { onSuggestionTap(readScreen) })
             Spacer(Modifier.height(8.dp))
-            SuggestionChip(text = "Pay the electricity bill", onClick = { onSuggestionTap("Pay the electricity bill") })
+            SuggestionChip(text = payBill, onClick = { onSuggestionTap(payBill) })
         }
 
         if (recentEntries.isNotEmpty()) {
@@ -143,7 +148,7 @@ fun HomeScreen(
                 value = draft,
                 onValueChange = onDraftChange,
                 modifier = Modifier.weight(1f),
-                placeholder = "or type it instead",
+                placeholder = stringResource(R.string.home_text_placeholder),
                 onSend = onSend,
             )
             SendButton(onClick = onSend)
@@ -151,11 +156,12 @@ fun HomeScreen(
     }
 }
 
+@Composable
 private fun homeCaption(isRecording: Boolean, isTranscribing: Boolean, isThinking: Boolean, language: Language): String = when {
-    isRecording -> "Listening…"
-    isTranscribing -> "Transcribing…"
-    isThinking -> "Thinking…"
-    else -> "Tap and speak · ${language.nativeName}"
+    isRecording -> stringResource(R.string.home_caption_listening)
+    isTranscribing -> stringResource(R.string.home_caption_transcribing)
+    isThinking -> stringResource(R.string.home_caption_thinking)
+    else -> stringResource(R.string.home_caption_tap_and_speak, language.nativeName)
 }
 
 @Composable
@@ -215,7 +221,7 @@ private fun HomeMicControl(isRecording: Boolean, isTranscribing: Boolean, onClic
         } else {
             Icon(
                 imageVector = HandrailIcons.Mic,
-                contentDescription = "Speak",
+                contentDescription = stringResource(R.string.cd_speak),
                 tint = HandrailColors.Accent700,
                 modifier = Modifier.size(46.dp),
             )
@@ -227,10 +233,10 @@ private fun HomeMicControl(isRecording: Boolean, isTranscribing: Boolean, onClic
 private fun EarlierTodaySection(entries: List<ChatEntry>, onOpenHistory: () -> Unit) {
     Column(modifier = Modifier.padding(start = 22.dp, end = 22.dp, bottom = 10.dp)) {
         Row(verticalAlignment = Alignment.CenterVertically, modifier = Modifier.padding(bottom = 10.dp)) {
-            Kicker(text = "Earlier today", fontSize = 12.sp, letterSpacing = 0.18.em)
+            Kicker(text = stringResource(R.string.earlier_today), fontSize = 12.sp, letterSpacing = 0.18.em)
             Spacer(Modifier.weight(1f).height(1.dp).background(HandrailColors.Divider))
             Text(
-                text = "All",
+                text = stringResource(R.string.all),
                 modifier = Modifier
                     .padding(start = 12.dp)
                     .clickable(onClick = onOpenHistory),

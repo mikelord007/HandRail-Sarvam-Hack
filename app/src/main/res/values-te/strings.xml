@@ -1,0 +1,132 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="accessibility_service_label">Handrail స్క్రీన్ రీడర్</string>
+    <string name="accessibility_service_description">Handrail ప్రస్తుత స్క్రీన్‌ను చదవడానికి అనుమతిస్తుంది, తద్వారా అది దాన్ని చదివి వినిపించగలదు లేదా మీరు అడిగిన పనులు చేయగలదు.</string>
+
+    <string name="back">వెనుకకు</string>
+    <string name="cd_send">పంపండి</string>
+    <string name="cd_close">మూసివేయి</string>
+    <string name="cd_speak">మాట్లాడండి</string>
+    <string name="cd_history">చరిత్ర</string>
+    <string name="cd_settings">సెట్టింగ్‌లు</string>
+    <string name="step_of">దశ %1$d, మొత్తం %2$d లో</string>
+    <string name="continue_label">కొనసాగించండి</string>
+    <string name="not_now">ఇప్పుడు వద్దు</string>
+
+    <string name="home_title">నేను మీ కోసం\nఏమి చేయాలి?</string>
+    <string name="home_caption_listening">వింటున్నాను…</string>
+    <string name="home_caption_transcribing">రాస్తున్నాను…</string>
+    <string name="home_caption_thinking">ఆలోచిస్తున్నాను…</string>
+    <string name="home_caption_tap_and_speak">నొక్కి మాట్లాడండి · %1$s</string>
+    <string name="suggestion_book_cab">ఇంటికి క్యాబ్ బుక్ చేయండి</string>
+    <string name="suggestion_read_screen">ఈ స్క్రీన్‌ను నాకు చదివి వినిపించండి</string>
+    <string name="suggestion_pay_bill">విద్యుత్ బిల్లు చెల్లించండి</string>
+    <string name="home_text_placeholder">లేదా బదులుగా టైప్ చేయండి</string>
+    <string name="earlier_today">ఈరోజు ముందు</string>
+    <string name="all">అన్నీ</string>
+
+    <string name="settings_title">సెట్టింగ్‌లు</string>
+    <string name="language_section">భాష</string>
+    <string name="settings_language_note">మాట్లాడటానికి మరియు వినడానికి రెండింటికీ %1$s ఉపయోగించబడుతుంది.</string>
+    <string name="permissions_section">అనుమతులు</string>
+    <string name="permission_accessibility">యాక్సెసిబిలిటీ సేవ</string>
+    <string name="permission_microphone">మైక్రోఫోన్</string>
+    <string name="permission_default_assistant">డిఫాల్ట్ సహాయకుడు</string>
+    <string name="pill_on">ఆన్</string>
+    <string name="pill_off">ఆఫ్</string>
+    <string name="behavior_section">నేను ఎలా ప్రవర్తిస్తాను</string>
+    <string name="toggle_narrate_title">ప్రతి దశను చెప్పండి</string>
+    <string name="toggle_narrate_desc">చేయడానికి ముందు దాన్ని చెప్పండి</string>
+    <string name="toggle_handback_title">చెల్లింపుకు ముందు ఎల్లప్పుడూ వెనక్కి అప్పగించండి</string>
+    <string name="toggle_handback_desc">డెమో కోసం లాక్ చేయబడింది</string>
+    <string name="toggle_speak_slowly_title">నెమ్మదిగా మాట్లాడండి</string>
+    <string name="toggle_speak_slowly_desc">సగం వేగం, పొడవైన విరామాలు</string>
+
+    <string name="history_title">చరిత్ర</string>
+    <string name="tab_tasks">పనులు</string>
+    <string name="tab_conversations">సంభాషణలు</string>
+    <string name="note_narrated">స్క్రీన్‌ను చదివి వినిపించింది</string>
+    <string name="note_in_progress">పురోగతిలో ఉంది</string>
+    <string name="note_waiting_answer">మీ సమాధానం కోసం వేచి ఉంది</string>
+    <string name="note_done">పూర్తయింది</string>
+    <string name="note_handback_at">\"%1$s\" వద్ద వెనక్కి అప్పగించారు</string>
+    <string name="note_stopped">ఆగిపోయింది — %1$s</string>
+    <string name="note_couldnt_finish">పూర్తి చేయలేకపోయాను — %1$s</string>
+    <string name="unknown_reason">తెలియని కారణం</string>
+    <string name="conversation_note">\"%1$s\" → %2$s</string>
+    <plurals name="steps_count">
+        <item quantity="one">%1$d దశ</item>
+        <item quantity="other">%1$d దశలు</item>
+    </plurals>
+    <plurals name="replies_count">
+        <item quantity="one">%1$d ప్రత్యుత్తరం</item>
+        <item quantity="other">%1$d ప్రత్యుత్తరాలు</item>
+    </plurals>
+    <string name="yesterday">నిన్న</string>
+
+    <string name="conversation_title">సంభాషణ</string>
+    <string name="conversation_gone">ఈ సంభాషణ ఇక అందుబాటులో లేదు.</string>
+    <string name="you_label">మీరు</string>
+
+    <string name="handback_kicker">నేను ఇక్కడ ఆగుతున్నాను</string>
+    <string name="handback_action_question">%1$s?</string>
+    <string name="handback_body">నేను దీన్ని మీ తరపున చేయబోతున్నాను. ఇప్పుడు మీరే దీన్ని పూర్తి చేయాలి.</string>
+    <string name="handback_footer">ఇది మీరు తీసుకోవలసిన నిర్ణయం. దీన్ని నేను మీ కోసం నొక్కను.</string>
+    <string name="handback_confirm_label">అవును — నేనే చేసుకుంటాను</string>
+    <string name="handback_decline_label">వద్దు, ఆపు</string>
+    <string name="handback_default_action_label">దీన్ని</string>
+
+    <string name="stop_label">ఆపు</string>
+    <string name="read_the_screen_task">స్క్రీన్ చదవండి</string>
+    <string name="step_reading_screen">స్క్రీన్ చదువుతున్నాను</string>
+    <string name="assist_a11y_not_enabled">యాక్సెసిబిలిటీ సేవ ఆన్‌లో లేదు.</string>
+    <string name="assist_nothing_readable">ఇప్పుడు స్క్రీన్‌పై చదవడానికి ఏమీ లేదు.</string>
+    <string name="assist_couldnt_reach_llm">భాషా మోడల్‌ను చేరుకోలేకపోయాను.</string>
+    <string name="step_label_format">దశ %1$d</string>
+    <string name="task_complete">పని పూర్తయింది</string>
+    <string name="tap_to_answer">సమాధానం ఇవ్వడానికి నొక్కండి</string>
+    <string name="state_ready">సిద్ధం</string>
+    <string name="state_listening">వింటోంది</string>
+    <string name="state_thinking">ఆలోచిస్తోంది</string>
+    <string name="state_speaking">మాట్లాడుతోంది</string>
+    <string name="state_acting">చేస్తోంది</string>
+
+    <string name="welcome_kicker">కొంచెం ఆగండి. నేను మిమ్మల్ని తీసుకెళ్తాను.</string>
+    <string name="welcome_body">మీరు ఏమి చేయాలనుకుంటున్నారో మీ భాషలో చెప్పండి. నేను స్క్రీన్‌ను బిగ్గరగా చదువుతాను, లేదా మీ కోసం నొక్కుతాను — ప్రతి దశను చేసే ముందు చెబుతాను.</string>
+    <string name="begin">ప్రారంభించండి</string>
+    <string name="welcome_footer">సుమారు ఒక నిమిషం పడుతుంది · నాలుగు అనుమతులు</string>
+
+    <string name="language_screen_title">నేను ఏ భాషలో మాట్లాడాలి?</string>
+    <string name="language_screen_body">నేను ఇదే భాషలో వింటాను కూడా. దీన్ని ఎప్పుడైనా సెట్టింగ్‌లలో మార్చవచ్చు.</string>
+    <string name="language_screen_count">%1$d భాషలు · Sarvam మరిన్ని జోడిస్తుంది</string>
+
+    <string name="voice_screen_title">నేను ఎవరి స్వరాన్ని ఉపయోగించాలి?</string>
+    <string name="voice_screen_body">ఒకదాన్ని నొక్కి అది ఒక లైన్ చదవడం వినండి.</string>
+    <string name="onboarding_voice_sample_line">నాకు Ola దొరికింది. ఇప్పుడు తెరుస్తున్నాను.</string>
+    <string name="use_this_voice">ఈ స్వరాన్ని వాడండి</string>
+
+    <string name="mic_screen_title">నేను మైక్రోఫోన్ ఉపయోగించవచ్చా?</string>
+    <string name="mic_screen_body">మీరు నాతో మాట్లాడుతున్నప్పుడు మాత్రమే. నేను నేపథ్యంలో వినను, పని ముగిసిన తర్వాత ఏమీ రికార్డ్ కాదు.</string>
+    <string name="mic_screen_note_prefix">Android తర్వాత మిమ్మల్ని అడుగుతుంది. ఎంచుకోండి </string>
+    <string name="mic_screen_note_highlight">\"యాప్‌ను ఉపయోగిస్తున్నప్పుడు\".</string>
+    <string name="allow_microphone">మైక్రోఫోన్‌ను అనుమతించండి</string>
+
+    <string name="a11y_screen_title">నన్ను స్క్రీన్ చదవనివ్వండి</string>
+    <string name="a11y_screen_body">Handrail ఒక యాక్సెసిబిలిటీ సేవ. ఇది మీ స్క్రీన్‌పై ఉన్న లేబుల్‌లను చదువుతుంది — ఎప్పుడూ చిత్రాలు కాదు, ఎప్పుడూ మీ కీబోర్డ్ కాదు.</string>
+    <string name="a11y_row_1">బటన్ మరియు టెక్స్ట్ లేబుల్‌లను చదువుతుంది</string>
+    <string name="a11y_row_2">మీ తరపున నొక్కుతుంది మరియు టైప్ చేస్తుంది</string>
+    <string name="a11y_row_3">ఎప్పుడూ స్క్రీన్‌షాట్‌లు లేదా ఫోటోలు తీయదు</string>
+    <string name="open_android_settings">Android సెట్టింగ్‌లను తెరవండి</string>
+    <string name="a11y_settings_path">సెట్టింగ్‌లు → యాక్సెసిబిలిటీ → Handrail → ఆన్</string>
+
+    <string name="assistant_screen_title">నా కోసం హోమ్ బటన్‌ను నొక్కి పట్టుకోండి</string>
+    <string name="assistant_screen_body">Handrail‌ను మీ సహాయకుడిగా చేయండి, హోమ్ బటన్‌ను నొక్కి పట్టుకుంటే మీరు ఏమి చేస్తున్నా దాని పైన నేను వస్తాను.</string>
+    <string name="set_as_assistant">సహాయకుడిగా సెట్ చేయండి</string>
+
+    <string name="my_promise">నా వాగ్దానం</string>
+    <string name="promise_headline">నేను ఎప్పుడూ మీ డబ్బు ఖర్చు చేయను.</string>
+    <string name="promise_body_prefix">నేను యాప్‌లను తెరవగలను, ఫారమ్‌లను పూరించగలను మరియు మీ రైడ్‌ను ఎంచుకోగలను. కానీ ఏదైనా చెల్లింపు, పంపడం, నిర్ధారణకు ముందు — నేను ఆగుతాను, ఏమి జరగబోతోందో బిగ్గరగా చెబుతాను, మరియు </string>
+    <string name="promise_body_you">మీరు</string>
+    <string name="promise_body_suffix"> చివరి నొక్కు వేస్తారు.</string>
+    <string name="promise_cta">నాకు అర్థమైంది — వెళ్దాం</string>
+</resources>

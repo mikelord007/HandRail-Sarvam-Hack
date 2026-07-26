@@ -2,6 +2,7 @@ package com.handrail.ui
 
 import android.Manifest
 import android.content.ActivityNotFoundException
+import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.os.Bundle
@@ -16,6 +17,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.lifecycleScope
+import com.handrail.R
 import com.handrail.chat.ChatEntry
 import com.handrail.chat.ChatHistoryStore
 import com.handrail.chat.ChatStatus
@@ -135,6 +137,11 @@ class MainActivity : ComponentActivity() {
         ActivityResultContracts.RequestPermission(),
     ) {}
 
+    /** Sets the app's display language from the very first frame, before onCreate/setContent run — see [LocalizedContent] for the live, no-recreate switch used after this. */
+    override fun attachBaseContext(newBase: Context) {
+        super.attachBaseContext(newBase.withLocale(VoicePreferences(newBase).language.code))
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         selectedLanguage = voicePreferences.language
@@ -145,6 +152,7 @@ class MainActivity : ComponentActivity() {
 
         setContent {
             HandrailTheme {
+                LocalizedContent(languageCode = selectedLanguage.code) {
                 BackHandler(enabled = nav.canGoBack) { nav.back() }
 
                 when (val screen = nav.current) {
@@ -226,6 +234,7 @@ class MainActivity : ComponentActivity() {
                         speakSlowly = speakSlowly,
                         onSpeakSlowlyToggle = ::onSpeakSlowlyToggle,
                     )
+                }
                 }
             }
         }
@@ -409,8 +418,9 @@ class MainActivity : ComponentActivity() {
         voicePreferences.speaker = speaker
         selectedSpeaker = speaker
         lifecycleScope.launch {
+            val sampleLine = applicationContext.withLocale(selectedLanguage.code).getString(R.string.onboarding_voice_sample_line)
             val audio = bulbulClient.synthesize(
-                "I found Ola. Opening it now.",
+                sampleLine,
                 selectedLanguage.code,
                 speaker.id,
                 VoiceSettings.PACE_NORMAL,

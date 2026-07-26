@@ -21,11 +21,13 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.shadow
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.em
 import androidx.compose.ui.unit.sp
+import com.handrail.R
 import com.handrail.ui.components.HandbackConfirmButton
 import com.handrail.ui.components.HandbackSecondaryButton
 import com.handrail.ui.theme.HandrailColors
@@ -72,7 +74,7 @@ fun HandbackScreen(actionLabel: String, onConfirm: () -> Unit, onDecline: () -> 
                 }
                 Spacer(Modifier.width(10.dp))
                 Text(
-                    text = "I'm stopping here",
+                    text = stringResource(R.string.handback_kicker),
                     style = TextStyle(fontFamily = HandrailType.Cormorant, fontSize = 14.sp, letterSpacing = 0.2.em),
                     color = HandrailColors.Accent700,
                 )
@@ -80,13 +82,13 @@ fun HandbackScreen(actionLabel: String, onConfirm: () -> Unit, onDecline: () -> 
             Spacer(Modifier.height(16.dp))
 
             Text(
-                text = "$actionLabel?",
+                text = stringResource(R.string.handback_action_question, actionLabel),
                 style = TextStyle(fontFamily = HandrailType.Cormorant, fontSize = 32.sp, lineHeight = 39.sp).merge(HandrailType.TabularFigures),
                 color = HandrailColors.Text,
             )
             Spacer(Modifier.height(6.dp))
             Text(
-                text = "I was about to do this on your behalf. You'll need to complete it yourself.",
+                text = stringResource(R.string.handback_body),
                 style = TextStyle(fontFamily = HandrailType.Lora, fontSize = 16.sp, lineHeight = 27.sp),
                 color = HandrailColors.Accent900,
             )
@@ -95,15 +97,15 @@ fun HandbackScreen(actionLabel: String, onConfirm: () -> Unit, onDecline: () -> 
             Box(modifier = Modifier.fillMaxWidth().height(1.dp).background(HandrailColors.Accent300))
             Spacer(Modifier.height(16.dp))
             Text(
-                text = "This one is yours to make. I won't tap it for you.",
+                text = stringResource(R.string.handback_footer),
                 style = TextStyle(fontFamily = HandrailType.Lora, fontSize = 14.5.sp, lineHeight = 23.sp, fontStyle = FontStyle.Italic),
                 color = HandrailColors.Accent800,
             )
 
             Spacer(Modifier.height(18.dp))
-            HandbackConfirmButton(label = "Yes — I'll do it myself", onClick = onConfirm)
+            HandbackConfirmButton(label = stringResource(R.string.handback_confirm_label), onClick = onConfirm)
             Spacer(Modifier.height(8.dp))
-            HandbackSecondaryButton(label = "No, stop", onClick = onDecline)
+            HandbackSecondaryButton(label = stringResource(R.string.handback_decline_label), onClick = onDecline)
         }
     }
 }
