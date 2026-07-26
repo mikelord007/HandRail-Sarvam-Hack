@@ -22,11 +22,13 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.em
 import androidx.compose.ui.unit.sp
+import com.handrail.R
 import com.handrail.speech.Language
 import com.handrail.ui.Permissions
 import com.handrail.ui.components.Hairline
@@ -67,9 +69,9 @@ fun SettingsScreen(
             verticalAlignment = Alignment.CenterVertically,
         ) {
             Box(modifier = Modifier.size(32.dp).clickable(onClick = onBack), contentAlignment = Alignment.CenterStart) {
-                Icon(imageVector = HandrailIcons.ArrowLeft, contentDescription = "Back", tint = HandrailColors.Neutral700, modifier = Modifier.size(20.dp))
+                Icon(imageVector = HandrailIcons.ArrowLeft, contentDescription = stringResource(R.string.back), tint = HandrailColors.Neutral700, modifier = Modifier.size(20.dp))
             }
-            Kicker(text = "Settings", fontSize = 15.sp, letterSpacing = 0.2.em)
+            Kicker(text = stringResource(R.string.settings_title), fontSize = 15.sp, letterSpacing = 0.2.em)
             Spacer(Modifier.width(32.dp))
         }
         Hairline()
@@ -81,39 +83,39 @@ fun SettingsScreen(
                 .verticalScroll(rememberScrollState())
                 .padding(start = 22.dp, end = 22.dp, top = 20.dp, bottom = 26.dp),
         ) {
-            Kicker(text = "Language", fontSize = 12.sp, letterSpacing = 0.18.em, modifier = Modifier.padding(bottom = 10.dp))
+            Kicker(text = stringResource(R.string.language_section), fontSize = 12.sp, letterSpacing = 0.18.em, modifier = Modifier.padding(bottom = 10.dp))
             LanguageGrid(languages, selectedLanguage, onLanguageSelected)
             Text(
-                text = "Speaking and listening both use ${selectedLanguage.nativeName}.",
+                text = stringResource(R.string.settings_language_note, selectedLanguage.nativeName),
                 modifier = Modifier.padding(top = 8.dp, bottom = 26.dp),
                 style = TextStyle(fontFamily = HandrailType.Lora, fontSize = 13.sp, fontStyle = FontStyle.Italic),
                 color = HandrailColors.Neutral600,
             )
 
-            Kicker(text = "Permissions", fontSize = 12.sp, letterSpacing = 0.18.em, modifier = Modifier.padding(bottom = 6.dp))
+            Kicker(text = stringResource(R.string.permissions_section), fontSize = 12.sp, letterSpacing = 0.18.em, modifier = Modifier.padding(bottom = 6.dp))
             Hairline()
-            PermissionRow(label = "Accessibility service", on = permissions.accessibility, onClick = onOpenAccessibilitySettings)
-            PermissionRow(label = "Microphone", on = permissions.microphone, onClick = onOpenMicrophoneSettings)
-            PermissionRow(label = "Default assistant", on = permissions.defaultAssistant, onClick = onOpenAssistantSettings)
+            PermissionRow(label = stringResource(R.string.permission_accessibility), on = permissions.accessibility, onClick = onOpenAccessibilitySettings)
+            PermissionRow(label = stringResource(R.string.permission_microphone), on = permissions.microphone, onClick = onOpenMicrophoneSettings)
+            PermissionRow(label = stringResource(R.string.permission_default_assistant), on = permissions.defaultAssistant, onClick = onOpenAssistantSettings)
             Spacer(Modifier.height(20.dp))
 
-            Kicker(text = "How I behave", fontSize = 12.sp, letterSpacing = 0.18.em, modifier = Modifier.padding(bottom = 6.dp))
+            Kicker(text = stringResource(R.string.behavior_section), fontSize = 12.sp, letterSpacing = 0.18.em, modifier = Modifier.padding(bottom = 6.dp))
             Hairline()
             ToggleRow(
-                title = "Narrate every step",
-                description = "Say the action before doing it",
+                title = stringResource(R.string.toggle_narrate_title),
+                description = stringResource(R.string.toggle_narrate_desc),
                 checked = narrateEveryStep,
                 onCheckedChange = onNarrateToggle,
             )
             ToggleRow(
-                title = "Always hand back before payment",
-                description = "Locked on for the demo",
+                title = stringResource(R.string.toggle_handback_title),
+                description = stringResource(R.string.toggle_handback_desc),
                 checked = true,
                 onCheckedChange = null,
             )
             ToggleRow(
-                title = "Speak slowly",
-                description = "Half speed, longer pauses",
+                title = stringResource(R.string.toggle_speak_slowly_title),
+                description = stringResource(R.string.toggle_speak_slowly_desc),
                 checked = speakSlowly,
                 onCheckedChange = onSpeakSlowlyToggle,
             )
@@ -153,7 +155,7 @@ private fun PermissionRow(label: String, on: Boolean, onClick: () -> Unit) {
         verticalAlignment = Alignment.CenterVertically,
     ) {
         Text(text = label, style = TextStyle(fontFamily = HandrailType.Lora, fontSize = 16.sp), color = HandrailColors.Text)
-        Pill(text = if (on) "On" else "Off", on = on)
+        Pill(text = stringResource(if (on) R.string.pill_on else R.string.pill_off), on = on)
     }
     Hairline()
 }

@@ -26,11 +26,13 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.em
 import androidx.compose.ui.unit.sp
+import com.handrail.R
 import com.handrail.ui.components.VoiceState
 import com.handrail.ui.components.VoiceStateIndicator
 import com.handrail.ui.icons.HandrailIcons
@@ -84,7 +86,7 @@ fun AssistOverlayScreen(
                     modifier = Modifier.size(40.dp).clickable(onClick = onClose),
                     contentAlignment = Alignment.Center,
                 ) {
-                    Icon(imageVector = HandrailIcons.Close, contentDescription = "Close", tint = HandrailColors.Neutral300, modifier = Modifier.size(20.dp))
+                    Icon(imageVector = HandrailIcons.Close, contentDescription = stringResource(R.string.cd_close), tint = HandrailColors.Neutral300, modifier = Modifier.size(20.dp))
                 }
             }
             Spacer(Modifier.height(16.dp))
@@ -112,7 +114,7 @@ fun AssistOverlayScreen(
             Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween, verticalAlignment = Alignment.CenterVertically) {
                 Text(text = stepLabel, style = TextStyle(fontFamily = HandrailType.Lora, fontSize = 14.sp), color = HandrailColors.Neutral400)
                 Text(
-                    text = "Stop",
+                    text = stringResource(R.string.stop_label),
                     modifier = Modifier.clickable(onClick = onStop),
                     style = TextStyle(fontFamily = HandrailType.Lora, fontSize = 14.sp, textDecoration = TextDecoration.Underline),
                     color = HandrailColors.Neutral300,

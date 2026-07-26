@@ -14,6 +14,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.buildAnnotatedString
@@ -21,6 +22,7 @@ import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.handrail.R
 import com.handrail.ui.components.CtaButton
 import com.handrail.ui.components.GhostButton
 import com.handrail.ui.components.Hairline
@@ -49,23 +51,25 @@ fun MicScreen(onAllow: () -> Unit, onNotNow: () -> Unit, onBack: () -> Unit) {
         }
         Spacer(Modifier.height(26.dp))
         Text(
-            text = "May I use the microphone?",
+            text = stringResource(R.string.mic_screen_title),
             style = TextStyle(fontFamily = HandrailType.Cormorant, fontSize = 36.sp, lineHeight = 41.sp),
             color = HandrailColors.Text,
         )
         Text(
-            text = "Only while you are talking to me. I don't listen in the background, and nothing is recorded after the task ends.",
+            text = stringResource(R.string.mic_screen_body),
             modifier = Modifier.padding(top = 12.dp, bottom = 20.dp),
             style = TextStyle(fontFamily = HandrailType.Lora, fontSize = 16.5.sp, lineHeight = 28.sp),
             color = HandrailColors.Neutral800,
         )
 
         Hairline()
+        val notePrefix = stringResource(R.string.mic_screen_note_prefix)
+        val noteHighlight = stringResource(R.string.mic_screen_note_highlight)
         Text(
             text = buildAnnotatedString {
-                append("Android will ask you next. Choose ")
+                append(notePrefix)
                 withStyle(SpanStyle(fontStyle = FontStyle.Normal, color = HandrailColors.Text)) {
-                    append("“While using the app”.")
+                    append(noteHighlight)
                 }
             },
             modifier = Modifier.padding(vertical = 16.dp),
@@ -75,7 +79,7 @@ fun MicScreen(onAllow: () -> Unit, onNotNow: () -> Unit, onBack: () -> Unit) {
         Hairline()
 
         Spacer(Modifier.weight(1f))
-        CtaButton(text = "Allow microphone", onClick = onAllow)
-        GhostButton(text = "Not now", onClick = onNotNow)
+        CtaButton(text = stringResource(R.string.allow_microphone), onClick = onAllow)
+        GhostButton(text = stringResource(R.string.not_now), onClick = onNotNow)
     }
 }

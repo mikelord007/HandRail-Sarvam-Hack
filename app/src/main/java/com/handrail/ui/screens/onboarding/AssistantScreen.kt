@@ -23,9 +23,11 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.graphicsLayer
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.handrail.R
 import com.handrail.ui.components.CtaButton
 import com.handrail.ui.components.GhostButton
 import com.handrail.ui.components.StepHeader
@@ -43,12 +45,12 @@ fun AssistantScreen(onSetAsAssistant: () -> Unit, onNotNow: () -> Unit, onBack: 
         StepHeader(step = 5, onBack = onBack)
 
         Text(
-            text = "Hold the home button for me",
+            text = stringResource(R.string.assistant_screen_title),
             style = TextStyle(fontFamily = HandrailType.Cormorant, fontSize = 36.sp, lineHeight = 41.sp),
             color = HandrailColors.Text,
         )
         Text(
-            text = "Make Handrail your assistant, and a long press on home brings me up over whatever you're doing.",
+            text = stringResource(R.string.assistant_screen_body),
             modifier = Modifier.padding(top = 12.dp, bottom = 26.dp),
             style = TextStyle(fontFamily = HandrailType.Lora, fontSize = 16.5.sp, lineHeight = 28.sp),
             color = HandrailColors.Neutral800,
@@ -64,8 +66,8 @@ fun AssistantScreen(onSetAsAssistant: () -> Unit, onNotNow: () -> Unit, onBack: 
         }
 
         Spacer(Modifier.weight(1f))
-        CtaButton(text = "Set as assistant", onClick = onSetAsAssistant)
-        GhostButton(text = "Not now", onClick = onNotNow)
+        CtaButton(text = stringResource(R.string.set_as_assistant), onClick = onSetAsAssistant)
+        GhostButton(text = stringResource(R.string.not_now), onClick = onNotNow)
     }
 }
 

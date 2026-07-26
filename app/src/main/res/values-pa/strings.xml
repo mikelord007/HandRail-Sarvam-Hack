@@ -1,0 +1,132 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="accessibility_service_label">Handrail ਸਕ੍ਰੀਨ ਰੀਡਰ</string>
+    <string name="accessibility_service_description">Handrail ਨੂੰ ਮੌਜੂਦਾ ਸਕ੍ਰੀਨ ਪੜ੍ਹਨ ਦਿੰਦਾ ਹੈ ਤਾਂ ਜੋ ਇਹ ਇਸਨੂੰ ਸੁਣਾ ਸਕੇ ਜਾਂ ਤੁਹਾਡੇ ਕਹੇ ਕੰਮ ਕਰ ਸਕੇ।</string>
+
+    <string name="back">ਪਿੱਛੇ</string>
+    <string name="cd_send">ਭੇਜੋ</string>
+    <string name="cd_close">ਬੰਦ ਕਰੋ</string>
+    <string name="cd_speak">ਬੋਲੋ</string>
+    <string name="cd_history">ਇਤਿਹਾਸ</string>
+    <string name="cd_settings">ਸੈਟਿੰਗਾਂ</string>
+    <string name="step_of">ਪੜਾਅ %1$d, ਕੁੱਲ %2$d ਵਿੱਚੋਂ</string>
+    <string name="continue_label">ਜਾਰੀ ਰੱਖੋ</string>
+    <string name="not_now">ਹੁਣੇ ਨਹੀਂ</string>
+
+    <string name="home_title">ਮੈਂ ਤੁਹਾਡੇ ਲਈ\nਕੀ ਕਰਾਂ?</string>
+    <string name="home_caption_listening">ਸੁਣ ਰਿਹਾ ਹਾਂ…</string>
+    <string name="home_caption_transcribing">ਲਿਖ ਰਿਹਾ ਹਾਂ…</string>
+    <string name="home_caption_thinking">ਸੋਚ ਰਿਹਾ ਹਾਂ…</string>
+    <string name="home_caption_tap_and_speak">ਟੈਪ ਕਰੋ ਅਤੇ ਬੋਲੋ · %1$s</string>
+    <string name="suggestion_book_cab">ਘਰ ਲਈ ਕੈਬ ਬੁੱਕ ਕਰੋ</string>
+    <string name="suggestion_read_screen">ਇਹ ਸਕ੍ਰੀਨ ਮੈਨੂੰ ਪੜ੍ਹ ਕੇ ਸੁਣਾਓ</string>
+    <string name="suggestion_pay_bill">ਬਿਜਲੀ ਦਾ ਬਿੱਲ ਭਰੋ</string>
+    <string name="home_text_placeholder">ਜਾਂ ਇਸਦੀ ਬਜਾਏ ਟਾਈਪ ਕਰੋ</string>
+    <string name="earlier_today">ਅੱਜ ਪਹਿਲਾਂ</string>
+    <string name="all">ਸਾਰੇ</string>
+
+    <string name="settings_title">ਸੈਟਿੰਗਾਂ</string>
+    <string name="language_section">ਭਾਸ਼ਾ</string>
+    <string name="settings_language_note">ਬੋਲਣ ਅਤੇ ਸੁਣਨ ਦੋਵਾਂ ਲਈ %1$s ਵਰਤੀ ਜਾਂਦੀ ਹੈ।</string>
+    <string name="permissions_section">ਇਜਾਜ਼ਤਾਂ</string>
+    <string name="permission_accessibility">ਐਕਸੈਸਿਬਿਲਟੀ ਸੇਵਾ</string>
+    <string name="permission_microphone">ਮਾਈਕ੍ਰੋਫ਼ੋਨ</string>
+    <string name="permission_default_assistant">ਡਿਫੌਲਟ ਸਹਾਇਕ</string>
+    <string name="pill_on">ਚਾਲੂ</string>
+    <string name="pill_off">ਬੰਦ</string>
+    <string name="behavior_section">ਮੈਂ ਕਿਵੇਂ ਵਿਵਹਾਰ ਕਰਦਾ ਹਾਂ</string>
+    <string name="toggle_narrate_title">ਹਰ ਕਦਮ ਦੱਸੋ</string>
+    <string name="toggle_narrate_desc">ਕਰਨ ਤੋਂ ਪਹਿਲਾਂ ਇਹ ਦੱਸੋ</string>
+    <string name="toggle_handback_title">ਭੁਗਤਾਨ ਤੋਂ ਪਹਿਲਾਂ ਹਮੇਸ਼ਾ ਵਾਪਸ ਸੌਂਪੋ</string>
+    <string name="toggle_handback_desc">ਡੈਮੋ ਲਈ ਲਾਕ ਕੀਤਾ ਗਿਆ</string>
+    <string name="toggle_speak_slowly_title">ਹੌਲੀ ਬੋਲੋ</string>
+    <string name="toggle_speak_slowly_desc">ਅੱਧੀ ਰਫ਼ਤਾਰ, ਲੰਬੇ ਵਿਰਾਮ</string>
+
+    <string name="history_title">ਇਤਿਹਾਸ</string>
+    <string name="tab_tasks">ਕੰਮ</string>
+    <string name="tab_conversations">ਗੱਲਬਾਤਾਂ</string>
+    <string name="note_narrated">ਸਕ੍ਰੀਨ ਪੜ੍ਹ ਕੇ ਸੁਣਾਈ</string>
+    <string name="note_in_progress">ਜਾਰੀ ਹੈ</string>
+    <string name="note_waiting_answer">ਤੁਹਾਡੇ ਜਵਾਬ ਦੀ ਉਡੀਕ ਹੈ</string>
+    <string name="note_done">ਪੂਰਾ</string>
+    <string name="note_handback_at">\"%1$s\" ਤੇ ਵਾਪਸ ਸੌਂਪਿਆ</string>
+    <string name="note_stopped">ਰੁਕ ਗਿਆ — %1$s</string>
+    <string name="note_couldnt_finish">ਪੂਰਾ ਨਹੀਂ ਕਰ ਸਕਿਆ — %1$s</string>
+    <string name="unknown_reason">ਅਣਜਾਣ ਕਾਰਨ</string>
+    <string name="conversation_note">\"%1$s\" → %2$s</string>
+    <plurals name="steps_count">
+        <item quantity="one">%1$d ਕਦਮ</item>
+        <item quantity="other">%1$d ਕਦਮ</item>
+    </plurals>
+    <plurals name="replies_count">
+        <item quantity="one">%1$d ਜਵਾਬ</item>
+        <item quantity="other">%1$d ਜਵਾਬ</item>
+    </plurals>
+    <string name="yesterday">ਕੱਲ੍ਹ</string>
+
+    <string name="conversation_title">ਗੱਲਬਾਤ</string>
+    <string name="conversation_gone">ਇਹ ਗੱਲਬਾਤ ਹੁਣ ਉਪਲਬਧ ਨਹੀਂ ਹੈ।</string>
+    <string name="you_label">ਤੁਸੀਂ</string>
+
+    <string name="handback_kicker">ਮੈਂ ਇੱਥੇ ਹੀ ਰੁਕਦਾ ਹਾਂ</string>
+    <string name="handback_action_question">%1$s?</string>
+    <string name="handback_body">ਮੈਂ ਇਹ ਤੁਹਾਡੀ ਤਰਫ਼ੋਂ ਕਰਨ ਵਾਲਾ ਸੀ। ਹੁਣ ਤੁਹਾਨੂੰ ਇਹ ਖੁਦ ਪੂਰਾ ਕਰਨਾ ਪਵੇਗਾ।</string>
+    <string name="handback_footer">ਇਹ ਫੈਸਲਾ ਤੁਹਾਡਾ ਹੈ। ਮੈਂ ਇਸਨੂੰ ਤੁਹਾਡੇ ਲਈ ਨਹੀਂ ਦਬਾਵਾਂਗਾ।</string>
+    <string name="handback_confirm_label">ਹਾਂ — ਮੈਂ ਖੁਦ ਕਰ ਲਵਾਂਗਾ</string>
+    <string name="handback_decline_label">ਨਹੀਂ, ਰੁਕੋ</string>
+    <string name="handback_default_action_label">ਇਹ</string>
+
+    <string name="stop_label">ਰੋਕੋ</string>
+    <string name="read_the_screen_task">ਸਕ੍ਰੀਨ ਪੜ੍ਹੋ</string>
+    <string name="step_reading_screen">ਸਕ੍ਰੀਨ ਪੜ੍ਹ ਰਿਹਾ ਹਾਂ</string>
+    <string name="assist_a11y_not_enabled">ਐਕਸੈਸਿਬਿਲਟੀ ਸੇਵਾ ਚਾਲੂ ਨਹੀਂ ਹੈ।</string>
+    <string name="assist_nothing_readable">ਹੁਣੇ ਸਕ੍ਰੀਨ ਤੇ ਪੜ੍ਹਨ ਲਈ ਕੁਝ ਨਹੀਂ ਹੈ।</string>
+    <string name="assist_couldnt_reach_llm">ਭਾਸ਼ਾ ਮਾਡਲ ਤੱਕ ਨਹੀਂ ਪਹੁੰਚ ਸਕਿਆ।</string>
+    <string name="step_label_format">ਪੜਾਅ %1$d</string>
+    <string name="task_complete">ਕੰਮ ਪੂਰਾ</string>
+    <string name="tap_to_answer">ਜਵਾਬ ਦੇਣ ਲਈ ਟੈਪ ਕਰੋ</string>
+    <string name="state_ready">ਤਿਆਰ</string>
+    <string name="state_listening">ਸੁਣ ਰਿਹਾ ਹੈ</string>
+    <string name="state_thinking">ਸੋਚ ਰਿਹਾ ਹੈ</string>
+    <string name="state_speaking">ਬੋਲ ਰਿਹਾ ਹੈ</string>
+    <string name="state_acting">ਕਰ ਰਿਹਾ ਹੈ</string>
+
+    <string name="welcome_kicker">ਰੁਕੋ। ਮੈਂ ਤੁਹਾਨੂੰ ਨਾਲ ਲੈ ਕੇ ਚੱਲਾਂਗਾ।</string>
+    <string name="welcome_body">ਮੈਨੂੰ ਦੱਸੋ ਤੁਸੀਂ ਕੀ ਕਰਨਾ ਚਾਹੁੰਦੇ ਹੋ, ਆਪਣੀ ਭਾਸ਼ਾ ਵਿੱਚ। ਮੈਂ ਸਕ੍ਰੀਨ ਉੱਚੀ ਆਵਾਜ਼ ਵਿੱਚ ਪੜ੍ਹਦਾ ਹਾਂ, ਜਾਂ ਤੁਹਾਡੇ ਲਈ ਟੈਪ ਕਰਦਾ ਹਾਂ — ਅਤੇ ਹਰ ਕਦਮ ਚੁੱਕਣ ਤੋਂ ਪਹਿਲਾਂ ਦੱਸਦਾ ਹਾਂ।</string>
+    <string name="begin">ਸ਼ੁਰੂ ਕਰੋ</string>
+    <string name="welcome_footer">ਲਗਭਗ ਇੱਕ ਮਿੰਟ ਲੱਗੇਗਾ · ਚਾਰ ਇਜਾਜ਼ਤਾਂ</string>
+
+    <string name="language_screen_title">ਮੈਨੂੰ ਕਿਹੜੀ ਭਾਸ਼ਾ ਵਿੱਚ ਬੋਲਣਾ ਚਾਹੀਦਾ ਹੈ?</string>
+    <string name="language_screen_body">ਮੈਂ ਇਸੇ ਭਾਸ਼ਾ ਵਿੱਚ ਸੁਣਾਂਗਾ ਵੀ। ਇਸਨੂੰ ਕਿਸੇ ਵੀ ਸਮੇਂ ਸੈਟਿੰਗਾਂ ਵਿੱਚ ਬਦਲਿਆ ਜਾ ਸਕਦਾ ਹੈ।</string>
+    <string name="language_screen_count">%1$d ਭਾਸ਼ਾਵਾਂ · Sarvam ਹੋਰ ਜੋੜੇਗਾ</string>
+
+    <string name="voice_screen_title">ਮੈਨੂੰ ਕਿਸਦੀ ਆਵਾਜ਼ ਵਰਤਣੀ ਚਾਹੀਦੀ ਹੈ?</string>
+    <string name="voice_screen_body">ਇੱਕ ਤੇ ਟੈਪ ਕਰੋ ਅਤੇ ਇਸਨੂੰ ਇੱਕ ਲਾਈਨ ਪੜ੍ਹਦੇ ਸੁਣੋ।</string>
+    <string name="onboarding_voice_sample_line">ਮੈਨੂੰ Ola ਮਿਲ ਗਿਆ। ਹੁਣੇ ਖੋਲ੍ਹ ਰਿਹਾ ਹਾਂ।</string>
+    <string name="use_this_voice">ਇਹ ਆਵਾਜ਼ ਵਰਤੋ</string>
+
+    <string name="mic_screen_title">ਕੀ ਮੈਂ ਮਾਈਕ੍ਰੋਫ਼ੋਨ ਵਰਤ ਸਕਦਾ ਹਾਂ?</string>
+    <string name="mic_screen_body">ਸਿਰਫ਼ ਉਦੋਂ ਜਦੋਂ ਤੁਸੀਂ ਮੇਰੇ ਨਾਲ ਗੱਲ ਕਰ ਰਹੇ ਹੋ। ਮੈਂ ਪਿਛੋਕੜ ਵਿੱਚ ਨਹੀਂ ਸੁਣਦਾ, ਅਤੇ ਕੰਮ ਖਤਮ ਹੋਣ ਤੋਂ ਬਾਅਦ ਕੁਝ ਵੀ ਰਿਕਾਰਡ ਨਹੀਂ ਹੁੰਦਾ।</string>
+    <string name="mic_screen_note_prefix">Android ਅੱਗੇ ਤੁਹਾਨੂੰ ਪੁੱਛੇਗਾ। ਚੁਣੋ </string>
+    <string name="mic_screen_note_highlight">\"ਐਪ ਵਰਤਦੇ ਸਮੇਂ\"।</string>
+    <string name="allow_microphone">ਮਾਈਕ੍ਰੋਫ਼ੋਨ ਦੀ ਇਜਾਜ਼ਤ ਦਿਓ</string>
+
+    <string name="a11y_screen_title">ਮੈਨੂੰ ਸਕ੍ਰੀਨ ਪੜ੍ਹਨ ਦਿਓ</string>
+    <string name="a11y_screen_body">Handrail ਇੱਕ ਐਕਸੈਸਿਬਿਲਟੀ ਸੇਵਾ ਹੈ। ਇਹ ਤੁਹਾਡੀ ਸਕ੍ਰੀਨ ਤੇ ਲੇਬਲ ਪੜ੍ਹਦੀ ਹੈ — ਕਦੇ ਤਸਵੀਰਾਂ ਨਹੀਂ, ਕਦੇ ਤੁਹਾਡਾ ਕੀਬੋਰਡ ਨਹੀਂ।</string>
+    <string name="a11y_row_1">ਬਟਨ ਅਤੇ ਟੈਕਸਟ ਲੇਬਲ ਪੜ੍ਹਦੀ ਹੈ</string>
+    <string name="a11y_row_2">ਤੁਹਾਡੀ ਤਰਫ਼ੋਂ ਟੈਪ ਅਤੇ ਟਾਈਪ ਕਰਦੀ ਹੈ</string>
+    <string name="a11y_row_3">ਕਦੇ ਸਕ੍ਰੀਨਸ਼ਾਟ ਜਾਂ ਫੋਟੋਆਂ ਨਹੀਂ ਲੈਂਦੀ</string>
+    <string name="open_android_settings">Android ਸੈਟਿੰਗਾਂ ਖੋਲ੍ਹੋ</string>
+    <string name="a11y_settings_path">ਸੈਟਿੰਗਾਂ → ਐਕਸੈਸਿਬਿਲਟੀ → Handrail → ਚਾਲੂ</string>
+
+    <string name="assistant_screen_title">ਮੇਰੇ ਲਈ ਹੋਮ ਬਟਨ ਦਬਾ ਕੇ ਰੱਖੋ</string>
+    <string name="assistant_screen_body">Handrail ਨੂੰ ਆਪਣਾ ਸਹਾਇਕ ਬਣਾਓ, ਫਿਰ ਹੋਮ ਬਟਨ ਦਬਾ ਕੇ ਰੱਖਣ ਤੇ ਤੁਸੀਂ ਜੋ ਵੀ ਕਰ ਰਹੇ ਹੋਵੋ ਉਸ ਉੱਤੇ ਮੈਂ ਆ ਜਾਵਾਂਗਾ।</string>
+    <string name="set_as_assistant">ਸਹਾਇਕ ਵਜੋਂ ਸੈੱਟ ਕਰੋ</string>
+
+    <string name="my_promise">ਮੇਰਾ ਵਾਅਦਾ</string>
+    <string name="promise_headline">ਮੈਂ ਕਦੇ ਵੀ ਤੁਹਾਡੇ ਪੈਸੇ ਖਰਚ ਨਹੀਂ ਕਰਦਾ।</string>
+    <string name="promise_body_prefix">ਮੈਂ ਐਪਾਂ ਖੋਲ੍ਹ ਸਕਦਾ ਹਾਂ, ਫਾਰਮ ਭਰ ਸਕਦਾ ਹਾਂ ਅਤੇ ਤੁਹਾਡੀ ਰਾਈਡ ਚੁਣ ਸਕਦਾ ਹਾਂ। ਪਰ ਕਿਸੇ ਵੀ ਭੁਗਤਾਨ, ਭੇਜਣ, ਪੁਸ਼ਟੀ ਤੋਂ ਪਹਿਲਾਂ — ਮੈਂ ਰੁਕਦਾ ਹਾਂ, ਉੱਚੀ ਆਵਾਜ਼ ਵਿੱਚ ਦੱਸਦਾ ਹਾਂ ਕਿ ਕੀ ਹੋਣ ਵਾਲਾ ਹੈ, ਅਤੇ </string>
+    <string name="promise_body_you">ਤੁਸੀਂ</string>
+    <string name="promise_body_suffix"> ਆਖਰੀ ਟੈਪ ਕਰਦੇ ਹੋ।</string>
+    <string name="promise_cta">ਮੈਨੂੰ ਸਮਝ ਆ ਗਿਆ — ਚਲੋ ਸ਼ੁਰੂ ਕਰੀਏ</string>
+</resources>

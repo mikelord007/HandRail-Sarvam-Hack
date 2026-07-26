@@ -1,6 +1,7 @@
 package com.handrail.ui
 
 import android.Manifest
+import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.os.Bundle
@@ -15,7 +16,9 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.core.content.ContextCompat
+import androidx.annotation.StringRes
 import androidx.lifecycle.lifecycleScope
+import com.handrail.R
 import com.handrail.actions.ActionExecutor
 import com.handrail.agent.AgentEvent
 import com.handrail.agent.AgentLoop
@@ -33,6 +36,7 @@ import com.handrail.speech.BulbulClient
 import com.handrail.speech.ErrorPhrases
 import com.handrail.speech.NarrationPlayer
 import com.handrail.speech.SaarasClient
+import com.handrail.speech.SupportedLanguages
 import com.handrail.speech.VoicePreferences
 import com.handrail.speech.VoiceSettings
 import com.handrail.ui.components.VoiceState
@@ -79,6 +83,8 @@ class AssistActivity : ComponentActivity() {
         get() = voicePreferences.settings
 
     private var overlayScreen by mutableStateOf<OverlayScreen>(OverlayScreen.Assist)
+    /** Re-read every onResume (see that override's note) so a language changed in Settings shows up even though this Activity instance never recreates. */
+    private var currentLanguageCode by mutableStateOf(SupportedLanguages.DEFAULT.code)
     private var voiceState by mutableStateOf(VoiceState.Idle)
     private var narrationLine by mutableStateOf("")
     private var stepLabel by mutableStateOf("")
@@ -94,17 +100,29 @@ class AssistActivity : ComponentActivity() {
         if (granted) {
             startRecording()
         } else {
+            // Log/internal only — SttState.Error's message is never rendered; the user hears ErrorPhrases via speakErrorAsync().
             sttState = SttState.Error("Microphone permission denied")
             speakErrorAsync()
         }
     }
 
+    /** Sets the app's display language from the very first frame — see [LocalizedContent] for the live update applied every [onResume]. */
+    override fun attachBaseContext(newBase: Context) {
+        super.attachBaseContext(newBase.withLocale(VoicePreferences(newBase).language.code))
+    }
+
+    /** Resolves a string against the CURRENT preference, not this Activity's (possibly stale, singleTask-reused) base locale — see [currentLanguageCode]. */
+    private fun str(@StringRes id: Int, vararg args: Any): String =
+        applicationContext.withLocale(voice.language.code).getString(id, *args)
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         applyWindowMode(modal = false)
+        currentLanguageCode = voicePreferences.language.code
 
         setContent {
             HandrailTheme {
+                LocalizedContent(languageCode = currentLanguageCode) {
                 BackHandler { onStopRequested() }
 
                 when (val screen = overlayScreen) {
@@ -121,6 +139,7 @@ class AssistActivity : ComponentActivity() {
                         onConfirm = ::onHandbackConfirm,
                         onDecline = ::onStopRequested,
                     )
+                }
                 }
             }
         }
@@ -139,6 +158,7 @@ class AssistActivity : ComponentActivity() {
         // re-assert idempotently from current state rather than assuming
         // onCreate's flags survived.
         applyWindowMode(modal = overlayScreen is OverlayScreen.Handback)
+        currentLanguageCode = voicePreferences.language.code
     }
 
     /**
@@ -194,12 +214,12 @@ class AssistActivity : ComponentActivity() {
             overlayScreen = OverlayScreen.Assist
             voiceState = VoiceState.Thinking
             narrationLine = ""
-            stepLabel = "Reading the screen"
+            stepLabel = str(R.string.step_reading_screen)
 
             val service = HandrailAccessibilityService.instance
             if (service == null) {
-                val message = "Accessibility service is not enabled."
-                Log.e(TAG, message)
+                val message = str(R.string.assist_a11y_not_enabled)
+                Log.e(TAG, "Accessibility service is not enabled.")
                 showIdleMessage(message)
                 speakError()
                 return@launch
@@ -207,8 +227,8 @@ class AssistActivity : ComponentActivity() {
 
             val perception = service.captureScreen(goHomeIfEmpty = true)
             if (perception == null || perception.refMap.isEmpty()) {
-                val message = "Nothing readable on screen right now."
-                Log.w(TAG, message)
+                val message = str(R.string.assist_nothing_readable)
+                Log.w(TAG, "Nothing readable on screen right now.")
                 showIdleMessage(message)
                 speakError()
                 return@launch
@@ -216,8 +236,8 @@ class AssistActivity : ComponentActivity() {
 
             val summary = summarize(perception.serialized)
             if (summary.isFailure) {
-                val message = "Couldn't reach the language model."
-                Log.e(TAG, message, summary.exceptionOrNull())
+                val message = str(R.string.assist_couldnt_reach_llm)
+                Log.e(TAG, "Couldn't reach the language model.", summary.exceptionOrNull())
                 showIdleMessage(message)
                 speakError()
                 return@launch
@@ -242,7 +262,7 @@ class AssistActivity : ComponentActivity() {
             chatHistoryStore.upsert(
                 ChatEntry(
                     id = UUID.randomUUID().toString(),
-                    task = "Read the screen",
+                    task = str(R.string.read_the_screen_task),
                     timestamp = System.currentTimeMillis(),
                     turns = listOf(ChatTurn("assistant", narrationText)),
                     status = ChatStatus.DONE,
@@ -338,7 +358,7 @@ class AssistActivity : ComponentActivity() {
         applyWindowMode(modal = false)
         voiceState = VoiceState.Thinking
         narrationLine = ""
-        stepLabel = "Reading the screen"
+        stepLabel = str(R.string.step_reading_screen)
 
         val resolvedChatId = chatId ?: UUID.randomUUID().toString()
         if (chatHistoryStore.find(resolvedChatId) == null) {
@@ -355,7 +375,7 @@ class AssistActivity : ComponentActivity() {
 
         val service = HandrailAccessibilityService.instance
         if (service == null) {
-            val message = "Accessibility service is not enabled."
+            val message = str(R.string.assist_a11y_not_enabled)
             showIdleMessage(message)
             appendChatTurn(resolvedChatId, message, ChatStatus.ERROR)
             speakErrorAsync()
@@ -377,14 +397,14 @@ class AssistActivity : ComponentActivity() {
                         maxStepSeen = maxOf(maxStepSeen, event.index)
                         voiceState = VoiceState.Acting
                         if (event.description.isNotBlank()) narrationLine = event.description
-                        stepLabel = "Step ${event.index}"
+                        stepLabel = str(R.string.step_label_format, event.index)
                         appendChatTurn(resolvedChatId, event.description, ChatStatus.RUNNING, stepCount = maxStepSeen)
                     }
                     is AgentEvent.Done -> {
                         pendingAgentContext = null
                         voiceState = VoiceState.Speaking
                         narrationLine = event.summary
-                        stepLabel = "Task complete"
+                        stepLabel = str(R.string.task_complete)
                         appendChatTurn(resolvedChatId, event.summary, ChatStatus.DONE, stepCount = maxStepSeen)
                     }
                     is AgentEvent.AskUser -> {
@@ -395,7 +415,7 @@ class AssistActivity : ComponentActivity() {
                         pendingAgentContext = PendingAgentContext(task, event.history, resolvedChatId)
                         voiceState = VoiceState.Idle
                         narrationLine = event.question
-                        stepLabel = "Tap to answer"
+                        stepLabel = str(R.string.tap_to_answer)
                         appendChatTurn(resolvedChatId, event.question, ChatStatus.ASK_USER, event.history, stepCount = maxStepSeen)
                     }
                     is AgentEvent.Blocked -> {
@@ -413,7 +433,7 @@ class AssistActivity : ComponentActivity() {
                         )
                         if (event.cause == BlockCause.IRREVERSIBLE_GUARD) {
                             overlayScreen = OverlayScreen.Handback(
-                                actionLabel = event.actionLabel ?: "this",
+                                actionLabel = event.actionLabel ?: str(R.string.handback_default_action_label),
                                 spokenReason = event.reason,
                             )
                             applyWindowMode(modal = true)

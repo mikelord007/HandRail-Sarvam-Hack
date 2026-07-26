@@ -11,10 +11,12 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.em
 import androidx.compose.ui.unit.sp
+import com.handrail.R
 import com.handrail.ui.theme.HandrailColors
 
 /**
@@ -41,10 +43,10 @@ fun StepHeader(
             horizontalArrangement = Arrangement.SpaceBetween,
             verticalAlignment = Alignment.CenterVertically,
         ) {
-            Kicker(text = "Step $step of $total", fontSize = 13.sp, letterSpacing = 0.18.em, color = kickerColor)
+            Kicker(text = stringResource(R.string.step_of, step, total), fontSize = 13.sp, letterSpacing = 0.18.em, color = kickerColor)
             if (onBack != null) {
                 Kicker(
-                    text = "Back",
+                    text = stringResource(R.string.back),
                     fontSize = 13.sp,
                     letterSpacing = 0.18.em,
                     color = kickerColor,

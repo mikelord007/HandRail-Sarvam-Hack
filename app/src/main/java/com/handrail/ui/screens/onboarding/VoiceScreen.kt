@@ -19,11 +19,13 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.em
 import androidx.compose.ui.unit.sp
+import com.handrail.R
 import com.handrail.speech.Speaker
 import com.handrail.ui.components.CtaButton
 import com.handrail.ui.components.Hairline
@@ -32,8 +34,6 @@ import com.handrail.ui.components.StepHeader
 import com.handrail.ui.theme.HandrailColors
 import com.handrail.ui.theme.HandrailDimens
 import com.handrail.ui.theme.HandrailType
-
-private const val SAMPLE_LINE = "I found Ola. Opening it now."
 
 /** Step 2 of 6 — a speaker choice, played back on selection so it isn't an abstract decision. */
 @Composable
@@ -52,12 +52,12 @@ fun VoiceScreen(
         StepHeader(step = 2, onBack = onBack)
 
         Text(
-            text = "Whose voice should I use?",
+            text = stringResource(R.string.voice_screen_title),
             style = TextStyle(fontFamily = HandrailType.Cormorant, fontSize = 36.sp, lineHeight = 41.sp),
             color = HandrailColors.Text,
         )
         Text(
-            text = "Tap one to hear it read a line back to you.",
+            text = stringResource(R.string.voice_screen_body),
             modifier = Modifier.padding(top = 10.dp, bottom = 24.dp),
             style = TextStyle(fontFamily = HandrailType.Lora, fontSize = 16.sp, lineHeight = 27.sp),
             color = HandrailColors.Neutral700,
@@ -79,7 +79,7 @@ fun VoiceScreen(
                     modifier = Modifier.padding(top = 3.dp),
                 )
                 Text(
-                    text = "“$SAMPLE_LINE”",
+                    text = "“${stringResource(R.string.onboarding_voice_sample_line)}”",
                     style = TextStyle(fontFamily = HandrailType.Lora, fontSize = 15.5.sp, lineHeight = 25.sp, fontStyle = FontStyle.Italic),
                     color = HandrailColors.Neutral800,
                 )
@@ -87,7 +87,7 @@ fun VoiceScreen(
         }
 
         Spacer(Modifier.weight(1f))
-        CtaButton(text = "Use this voice", onClick = onContinue)
+        CtaButton(text = stringResource(R.string.use_this_voice), onClick = onContinue)
     }
 }
 

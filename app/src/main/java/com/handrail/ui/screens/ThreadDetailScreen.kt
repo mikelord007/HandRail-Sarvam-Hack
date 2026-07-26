@@ -19,10 +19,12 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.em
 import androidx.compose.ui.unit.sp
+import com.handrail.R
 import com.handrail.chat.ChatEntry
 import com.handrail.chat.ChatStatus
 import com.handrail.chat.ChatTurn
@@ -52,16 +54,16 @@ fun ThreadDetailScreen(entry: ChatEntry?, onBack: () -> Unit) {
                 modifier = Modifier.size(32.dp).clickable(onClick = onBack),
                 contentAlignment = Alignment.CenterStart,
             ) {
-                Icon(imageVector = HandrailIcons.ArrowLeft, contentDescription = "Back", tint = HandrailColors.Neutral700, modifier = Modifier.size(20.dp))
+                Icon(imageVector = HandrailIcons.ArrowLeft, contentDescription = stringResource(R.string.back), tint = HandrailColors.Neutral700, modifier = Modifier.size(20.dp))
             }
-            Kicker(text = "Conversation", fontSize = 15.sp, letterSpacing = 0.2.em)
+            Kicker(text = stringResource(R.string.conversation_title), fontSize = 15.sp, letterSpacing = 0.2.em)
             Spacer(Modifier.width(32.dp))
         }
         Hairline()
 
         if (entry == null) {
             Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
-                Text(text = "This conversation is gone.", style = TextStyle(fontFamily = HandrailType.Lora, fontSize = 15.sp), color = HandrailColors.Neutral600)
+                Text(text = stringResource(R.string.conversation_gone), style = TextStyle(fontFamily = HandrailType.Lora, fontSize = 15.sp), color = HandrailColors.Neutral600)
             }
             return
         }
@@ -85,10 +87,10 @@ fun ThreadDetailScreen(entry: ChatEntry?, onBack: () -> Unit) {
 @Composable
 private fun ThinkingRow() {
     Column(modifier = Modifier.fillMaxWidth().padding(vertical = 14.dp)) {
-        Kicker(text = "Handrail", fontSize = 12.sp, letterSpacing = 0.18.em, color = HandrailColors.Accent700)
+        Kicker(text = stringResource(R.string.app_name), fontSize = 12.sp, letterSpacing = 0.18.em, color = HandrailColors.Accent700)
         Spacer(Modifier.height(6.dp))
         Text(
-            text = "Thinking…",
+            text = stringResource(R.string.home_caption_thinking),
             style = TextStyle(fontFamily = HandrailType.Lora, fontSize = 15.5.sp, lineHeight = 23.sp),
             color = HandrailColors.Neutral600,
         )
@@ -99,7 +101,7 @@ private fun ThinkingRow() {
 private fun TurnRow(turn: ChatTurn) {
     Column(modifier = Modifier.fillMaxWidth().padding(vertical = 14.dp)) {
         Kicker(
-            text = if (turn.role == "user") "You" else "Handrail",
+            text = if (turn.role == "user") stringResource(R.string.you_label) else stringResource(R.string.app_name),
             fontSize = 12.sp,
             letterSpacing = 0.18.em,
             color = if (turn.role == "user") HandrailColors.Neutral600 else HandrailColors.Accent700,

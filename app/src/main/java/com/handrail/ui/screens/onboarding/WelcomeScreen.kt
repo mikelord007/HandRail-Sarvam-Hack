@@ -13,11 +13,13 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.em
 import androidx.compose.ui.unit.sp
+import com.handrail.R
 import com.handrail.ui.components.CtaButton
 import com.handrail.ui.components.Kicker
 import com.handrail.ui.icons.HandrailIcons
@@ -44,27 +46,27 @@ fun WelcomeScreen(onBegin: () -> Unit) {
             )
             Spacer(Modifier.height(26.dp))
             Text(
-                text = "Handrail",
+                text = stringResource(R.string.app_name),
                 style = TextStyle(fontFamily = HandrailType.Cormorant, fontSize = 46.sp, lineHeight = 48.sp),
                 color = HandrailColors.Text,
             )
             Kicker(
-                text = "Hold on. I'll walk you through.",
+                text = stringResource(R.string.welcome_kicker),
                 fontSize = 15.sp,
                 letterSpacing = 0.15.em,
                 modifier = Modifier.padding(top = 8.dp),
             )
             Text(
-                text = "Tell me what you want to do, in your language. I read the screen aloud, or I do the tapping for you — and I say every step before I take it.",
+                text = stringResource(R.string.welcome_body),
                 modifier = Modifier.padding(top = 26.dp),
                 style = TextStyle(fontFamily = HandrailType.Lora, fontSize = 17.sp, lineHeight = 30.sp),
                 color = HandrailColors.Neutral800,
             )
         }
 
-        CtaButton(text = "Begin", onClick = onBegin)
+        CtaButton(text = stringResource(R.string.begin), onClick = onBegin)
         Text(
-            text = "Takes about a minute · four permissions",
+            text = stringResource(R.string.welcome_footer),
             modifier = Modifier
                 .padding(top = 14.dp)
                 .fillMaxWidth(),
