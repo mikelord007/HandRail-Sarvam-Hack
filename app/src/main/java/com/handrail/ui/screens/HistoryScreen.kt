@@ -1,6 +1,5 @@
 package com.handrail.ui.screens
 
-import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -18,10 +17,6 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.pluralStringResource
@@ -38,25 +33,24 @@ import com.handrail.chat.ChatStatus
 import com.handrail.chat.EntryKind
 import com.handrail.ui.components.Hairline
 import com.handrail.ui.components.Kicker
+import com.handrail.ui.components.Pill
 import com.handrail.ui.formatRelativeTime
 import com.handrail.ui.icons.HandrailIcons
 import com.handrail.ui.theme.HandrailColors
 import com.handrail.ui.theme.HandrailType
 
-private enum class HistoryTab { Tasks, Conversations }
-
 /**
  * The "quiet half" of the app — a flat receipt list of what Handrail did,
- * what it cost (in steps), and what it refused. Tapping any row opens
- * [ThreadDetailScreen] — the design's own Conversations rows go nowhere
- * (they just return to home), which loses the ability to read what the
- * agent actually said; see the plan's deviations table.
+ * what it cost (in steps), and what it refused. One list, newest first;
+ * rows where the agent actually ran a task (as opposed to a plain chat
+ * reply) carry a small "Task" tag rather than living on a separate tab —
+ * a thread can be chat for a while and then run a task partway through,
+ * so a hard split into two tabs would have to put it in both or neither.
+ * Tapping any row opens [ThreadDetailScreen].
  */
 @Composable
 fun HistoryScreen(entries: List<ChatEntry>, onBack: () -> Unit, onOpenThread: (String) -> Unit) {
-    var tab by remember { mutableStateOf(HistoryTab.Tasks) }
     val sorted = entries.sortedByDescending { it.timestamp }
-    val conversations = sorted.filter { it.turns.count { turn -> turn.role == "user" } > 1 }
 
     Column(modifier = Modifier.fillMaxSize()) {
         Row(
@@ -77,18 +71,14 @@ fun HistoryScreen(entries: List<ChatEntry>, onBack: () -> Unit, onOpenThread: (S
         }
         Hairline()
 
-        Row(modifier = Modifier.fillMaxWidth()) {
-            HistoryTabButton(text = stringResource(R.string.tab_tasks), active = tab == HistoryTab.Tasks, modifier = Modifier.weight(1f)) { tab = HistoryTab.Tasks }
-            HistoryTabButton(text = stringResource(R.string.tab_conversations), active = tab == HistoryTab.Conversations, modifier = Modifier.weight(1f)) { tab = HistoryTab.Conversations }
-        }
-
-        val rows = if (tab == HistoryTab.Tasks) sorted else conversations
         LazyColumn(modifier = Modifier.weight(1f).fillMaxWidth().padding(horizontal = 22.dp)) {
-            items(rows, key = { it.id }) { entry ->
+            items(sorted, key = { it.id }) { entry ->
+                val isTask = isTaskEntry(entry)
                 HistoryRow(
                     title = entry.task,
                     time = formatRelativeTime(entry.timestamp),
-                    note = if (tab == HistoryTab.Tasks) taskNote(entry) else conversationNote(entry),
+                    note = if (entry.kind == EntryKind.NARRATION || isTask) taskNote(entry) else conversationNote(entry),
+                    isTask = isTask,
                     onClick = { onOpenThread(entry.id) },
                 )
             }
@@ -96,34 +86,25 @@ fun HistoryScreen(entries: List<ChatEntry>, onBack: () -> Unit, onOpenThread: (S
     }
 }
 
-@Composable
-private fun HistoryTabButton(text: String, active: Boolean, modifier: Modifier = Modifier, onClick: () -> Unit) {
-    val lineColor = if (active) HandrailColors.Accent else androidx.compose.ui.graphics.Color.Transparent
-    val ink = if (active) HandrailColors.Text else HandrailColors.Neutral600
-    Box(
-        modifier = modifier
-            .height(48.dp)
-            .clickable(onClick = onClick)
-            .background(androidx.compose.ui.graphics.Color.Transparent),
-        contentAlignment = Alignment.Center,
-    ) {
-        Column(horizontalAlignment = Alignment.CenterHorizontally) {
-            Kicker(text = text, fontSize = 15.sp, letterSpacing = 0.14.em, color = ink)
-        }
-        Box(modifier = Modifier.fillMaxWidth().height(2.dp).background(lineColor).align(Alignment.BottomCenter))
-    }
-}
+/** A real takeover run happened somewhere in this thread — as opposed to a plain spoken/typed reply. */
+private fun isTaskEntry(entry: ChatEntry): Boolean = entry.turns.any { it.isTaskStep }
 
 @Composable
-private fun HistoryRow(title: String, time: String, note: String, onClick: () -> Unit) {
+private fun HistoryRow(title: String, time: String, note: String, isTask: Boolean, onClick: () -> Unit) {
     Column(modifier = Modifier.fillMaxWidth().clickable(onClick = onClick).padding(vertical = 16.dp)) {
         Row(horizontalArrangement = Arrangement.SpaceBetween, verticalAlignment = Alignment.Bottom, modifier = Modifier.fillMaxWidth()) {
-            Text(
-                text = title,
-                style = TextStyle(fontFamily = HandrailType.Lora, fontSize = 16.5.sp),
-                color = HandrailColors.Text,
-                modifier = Modifier.weight(1f, fill = false),
-            )
+            Row(verticalAlignment = Alignment.CenterVertically, modifier = Modifier.weight(1f, fill = false)) {
+                if (isTask) {
+                    Pill(text = stringResource(R.string.history_task_tag), on = true)
+                    Spacer(Modifier.width(8.dp))
+                }
+                Text(
+                    text = title,
+                    style = TextStyle(fontFamily = HandrailType.Lora, fontSize = 16.5.sp),
+                    color = HandrailColors.Text,
+                    modifier = Modifier.weight(1f, fill = false),
+                )
+            }
             Spacer(Modifier.width(12.dp))
             Text(
                 text = time,

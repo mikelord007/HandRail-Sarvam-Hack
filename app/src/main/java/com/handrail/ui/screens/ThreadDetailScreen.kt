@@ -13,7 +13,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -31,6 +31,7 @@ import com.handrail.chat.ChatTurn
 import com.handrail.ui.components.Hairline
 import com.handrail.ui.components.HandrailTextField
 import com.handrail.ui.components.Kicker
+import com.handrail.ui.components.Pill
 import com.handrail.ui.components.SendButton
 import com.handrail.ui.icons.HandrailIcons
 import com.handrail.ui.theme.HandrailColors
@@ -42,7 +43,10 @@ import com.handrail.ui.theme.HandrailType
  * chat bubbles, per the deviations table — since a bubble list is exactly
  * the un-styled look this whole port is replacing. Carries its own message
  * row so a thread can keep going here — chat for a while, then ask for a
- * task, all in the same conversation — instead of being read-only.
+ * task, all in the same conversation — instead of being read-only. A
+ * thread that starts as chat and then runs a task gets a "Task" tag right
+ * where the task turns begin, instead of that fact being invisible once
+ * it's folded into one merged History row.
  */
 @Composable
 fun ThreadDetailScreen(
@@ -86,7 +90,11 @@ fun ThreadDetailScreen(
         )
 
         LazyColumn(modifier = Modifier.weight(1f).fillMaxWidth().padding(horizontal = 22.dp)) {
-            items(entry.turns) { turn -> TurnRow(turn) }
+            itemsIndexed(entry.turns) { index, turn ->
+                val taskStartsHere = turn.isTaskStep && (index == 0 || !entry.turns[index - 1].isTaskStep)
+                if (taskStartsHere) TaskStartTag()
+                TurnRow(turn)
+            }
             if (entry.status == ChatStatus.RUNNING) {
                 item { ThinkingRow() }
             }
@@ -124,6 +132,13 @@ private fun ThinkingRow() {
             style = TextStyle(fontFamily = HandrailType.Lora, fontSize = 15.5.sp, lineHeight = 23.sp),
             color = HandrailColors.Neutral600,
         )
+    }
+}
+
+@Composable
+private fun TaskStartTag() {
+    Box(modifier = Modifier.fillMaxWidth().padding(top = 14.dp)) {
+        Pill(text = stringResource(R.string.history_task_tag), on = true)
     }
 }
 

@@ -463,7 +463,7 @@ class AssistActivity : ComponentActivity() {
         val entry = chatHistoryStore.find(chatId) ?: return
         chatHistoryStore.upsert(
             entry.copy(
-                turns = entry.turns + ChatTurn("assistant", text),
+                turns = entry.turns + ChatTurn("assistant", text, isTaskStep = true),
                 status = status,
                 agentHistory = agentHistory ?: entry.agentHistory,
                 stepCount = stepCount ?: entry.stepCount,

@@ -49,8 +49,7 @@
 
     <!-- History -->
     <string name="history_title">History</string>
-    <string name="tab_tasks">Tasks</string>
-    <string name="tab_conversations">Conversations</string>
+    <string name="history_task_tag">Task</string>
     <string name="note_narrated">Narrated the screen</string>
     <string name="note_in_progress">In progress</string>
     <string name="note_waiting_answer">Waiting for your answer</string>

@@ -4,7 +4,12 @@ import com.handrail.agent.BlockCause
 import kotlinx.serialization.Serializable
 
 @Serializable
-data class ChatTurn(val role: String, val text: String)
+data class ChatTurn(
+    val role: String,
+    val text: String,
+    /** True for a turn the agent loop produced while running a task (as opposed to a plain chat reply) — lets a thread that starts as chat and later runs a task mark where the task began. */
+    val isTaskStep: Boolean = false,
+)
 
 enum class ChatStatus { RUNNING, DONE, ASK_USER, BLOCKED, ERROR }
 
