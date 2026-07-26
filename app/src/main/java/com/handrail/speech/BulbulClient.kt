@@ -22,6 +22,7 @@ private data class TtsRequest(
     val speaker: String,
     val pace: Float,
     val model: String,
+    @SerialName("speech_sample_rate") val speechSampleRate: Int,
 )
 
 @Serializable
@@ -44,10 +45,11 @@ class BulbulClient {
 
     /**
      * [speakerId] and [pace] default to Meera-at-normal-speed so existing
-     * call sites keep compiling unchanged. `model` is pinned explicitly:
-     * verified live against the Sarvam API that the design's speaker names
-     * (Meera/Arvind/Pavithra -> anushka/abhilash/vidya, see [Speakers]) are
-     * `bulbul:v2` IDs — `bulbul:v1` has a different roster and rejects them.
+     * call sites keep compiling unchanged. `model` is pinned to `bulbul:v3`
+     * for its larger, more natural voice roster; [Speakers] maps the design's
+     * personas onto v3 speaker IDs (see that file's doc comment — v2's roster
+     * does not carry over, each model version has its own valid speaker set).
+     * `speech_sample_rate` is pinned to v3's max quality tier (24kHz).
      */
     suspend fun synthesize(
         text: String,
@@ -64,6 +66,7 @@ class BulbulClient {
                         speaker = speakerId,
                         pace = pace,
                         model = BULBUL_MODEL,
+                        speechSampleRate = BULBUL_SAMPLE_RATE,
                     ),
                 )
                 val request = Request.Builder()
@@ -89,6 +92,7 @@ class BulbulClient {
         }
 
     private companion object {
-        const val BULBUL_MODEL = "bulbul:v2"
+        const val BULBUL_MODEL = "bulbul:v3"
+        const val BULBUL_SAMPLE_RATE = 24000
     }
 }
