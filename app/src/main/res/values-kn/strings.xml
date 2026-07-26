@@ -18,9 +18,9 @@
     <string name="home_caption_transcribing">ಬರೆಯುತ್ತಿದ್ದೇನೆ…</string>
     <string name="home_caption_thinking">ಯೋಚಿಸುತ್ತಿದ್ದೇನೆ…</string>
     <string name="home_caption_tap_and_speak">ಟ್ಯಾಪ್ ಮಾಡಿ ಮಾತನಾಡಿ · %1$s</string>
-    <string name="suggestion_book_cab">ಮನೆಗೆ ಕ್ಯಾಬ್ ಬುಕ್ ಮಾಡಿ</string>
+    <string name="suggestion_search_weather">ಕ್ರೋಮ್‌ನಲ್ಲಿ ಹವಾಮಾನ ಹುಡುಕಿ</string>
     <string name="suggestion_read_screen">ಈ ಸ್ಕ್ರೀನ್ ಅನ್ನು ನನಗೆ ಓದಿ ಹೇಳಿ</string>
-    <string name="suggestion_pay_bill">ವಿದ್ಯುತ್ ಬಿಲ್ ಪಾವತಿಸಿ</string>
+    <string name="suggestion_search_cricket">ಕ್ರೋಮ್‌ನಲ್ಲಿ ಕ್ರಿಕೆಟ್ ಸ್ಕೋರ್ ನೋಡಿ</string>
     <string name="home_text_placeholder">ಅಥವಾ ಬದಲಿಗೆ ಟೈಪ್ ಮಾಡಿ</string>
     <string name="earlier_today">ಇಂದು ಮೊದಲು</string>
     <string name="all">ಎಲ್ಲಾ</string>

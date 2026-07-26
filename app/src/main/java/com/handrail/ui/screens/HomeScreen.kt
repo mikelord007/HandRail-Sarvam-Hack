@@ -122,14 +122,14 @@ fun HomeScreen(
 
             // Design wraps these in a centered flex row; stacked here to avoid
             // pulling in the experimental FlowRow API for three fixed strings.
-            val bookCab = stringResource(R.string.suggestion_book_cab)
+            val searchWeather = stringResource(R.string.suggestion_search_weather)
             val readScreen = stringResource(R.string.suggestion_read_screen)
-            val payBill = stringResource(R.string.suggestion_pay_bill)
-            SuggestionChip(text = bookCab, onClick = { onSuggestionTap(bookCab) })
+            val searchCricket = stringResource(R.string.suggestion_search_cricket)
+            SuggestionChip(text = searchWeather, onClick = { onSuggestionTap(searchWeather) })
             Spacer(Modifier.height(8.dp))
             SuggestionChip(text = readScreen, onClick = { onSuggestionTap(readScreen) })
             Spacer(Modifier.height(8.dp))
-            SuggestionChip(text = payBill, onClick = { onSuggestionTap(payBill) })
+            SuggestionChip(text = searchCricket, onClick = { onSuggestionTap(searchCricket) })
         }
 
         if (recentEntries.isNotEmpty()) {
