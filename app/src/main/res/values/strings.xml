@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Handrail</string>
+    <string name="accessibility_service_label">Handrail Screen Reader</string>
+    <string name="accessibility_service_description">Lets Handrail read the current screen so it can narrate it or perform actions you ask for.</string>
+</resources>
