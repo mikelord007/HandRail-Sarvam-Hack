@@ -52,9 +52,44 @@ import kotlinx.coroutines.launch
 
 private const val TAG = "MainActivity"
 
-/** Plain conversation only — no tool calls, no screen actions. Takeover mode lives in AssistActivity, reached only via the real ASSIST invocation. */
+/** For a CHAT-classified turn: no tool calls, no screen actions, just a spoken reply. */
 private val CHAT_SYSTEM_PROMPT = """
-    You are Handrail, a friendly voice assistant. Reply conversationally in %LANGUAGE%, in one to three short spoken sentences. No markdown, no lists. You cannot see the user's screen or perform actions on their phone from this conversation — if asked to do something on-screen, tell them to long-press their home button to invoke you as their assistant on that screen.
+    You are Handrail, a friendly voice assistant. Reply conversationally in %LANGUAGE%, in one to three short spoken sentences. No markdown, no lists. You are not performing any action on the user's phone right now — you're just talking with them.
+""".trimIndent()
+
+/**
+ * Routes every Home/thread message before anything else runs, so a wrong
+ * call here either skips a real task (stays CHAT) or wrongly opens the
+ * takeover overlay for small talk (calls TASK). Strict + few-shot per
+ * CLAUDE.md's "assume the weaker model" guidance. Sees the whole thread so
+ * far, not just the latest line, so a task request that only makes sense
+ * after prior chat turns (mid-conversation switch) still classifies right.
+ */
+private val INTENT_CLASSIFIER_PROMPT = """
+    You classify the LATEST message in a conversation with a phone voice assistant, using the earlier turns only as context for what "it"/"that" might refer to.
+
+    Reply TASK if the latest message asks the assistant to perform an action on the phone: open an app, search for something, book/order/pay for something, navigate somewhere, or otherwise tap/scroll/type on a screen.
+    Reply CHAT if it's a question, statement, or small talk that needs no on-screen action.
+
+    Respond with exactly one word: TASK or CHAT. No punctuation, no explanation, nothing else.
+
+    Examples:
+    User: hey
+    CHAT
+    User: what's the capital of France
+    CHAT
+    User: book a cab home
+    TASK
+    User: open Chrome and search for weather
+    TASK
+    User: tell me a joke
+    CHAT
+    User: pay the electricity bill
+    TASK
+    User: I need to get to the airport by 6
+    CHAT
+    User: yeah go ahead and book it
+    TASK
 """.trimIndent()
 
 /**
@@ -75,6 +110,8 @@ class MainActivity : ComponentActivity() {
 
     private var entries by mutableStateOf<List<ChatEntry>>(emptyList())
     private var draft by mutableStateOf("")
+    /** [ThreadDetailScreen]'s own input — separate from Home's [draft] so opening a thread doesn't leak Home's leftover text into it. */
+    private var threadDraft by mutableStateOf("")
     private var isRecording by mutableStateOf(false)
     private var isTranscribing by mutableStateOf(false)
     private var isThinking by mutableStateOf(false)
@@ -174,11 +211,14 @@ class MainActivity : ComponentActivity() {
                     Screen.History -> HistoryScreen(
                         entries = entries,
                         onBack = nav::back,
-                        onOpenThread = { chatId -> nav.go(Screen.ThreadDetail(chatId)) },
+                        onOpenThread = { chatId -> threadDraft = ""; nav.go(Screen.ThreadDetail(chatId)) },
                     )
                     is Screen.ThreadDetail -> ThreadDetailScreen(
                         entry = entries.firstOrNull { it.id == screen.chatId },
                         onBack = nav::back,
+                        draft = threadDraft,
+                        onDraftChange = { threadDraft = it },
+                        onSend = { onThreadSend(screen.chatId) },
                     )
                     Screen.Settings -> SettingsScreen(
                         onBack = nav::back,
@@ -219,14 +259,18 @@ class MainActivity : ComponentActivity() {
         submitTask(text)
     }
 
+    private fun onThreadSend(chatId: String) {
+        val text = threadDraft.trim()
+        if (text.isEmpty()) return
+        threadDraft = ""
+        continueThread(chatId, text)
+    }
+
     /**
-     * A plain, spoken conversation turn — no overlay, no agent tool-calling.
-     * The translucent takeover/narration overlay ([AssistActivity]) is
-     * reserved for the real ASSIST invocation (long-press home) over
-     * whatever app/screen is in the foreground at the time; chatting on
-     * Handrail's own Home screen never leaves this Activity. Navigates to
-     * the new entry's [ThreadDetailScreen] immediately, before the reply
-     * arrives, so the exchange plays out live like a normal chat.
+     * A fresh message from Home — always starts a brand-new thread and
+     * navigates straight into it, before any reply arrives, so the exchange
+     * plays out live like a normal chat. [continueThread] is the same idea
+     * for a message sent from inside an already-open thread.
      */
     private fun submitTask(userText: String) {
         val entry = ChatEntry(
@@ -239,16 +283,47 @@ class MainActivity : ComponentActivity() {
         chatHistoryStore.upsert(entry)
         reloadHistory()
         nav.go(Screen.ThreadDetail(entry.id))
+        respondTo(entry)
+    }
 
+    private fun continueThread(chatId: String, userText: String) {
+        val existing = chatHistoryStore.find(chatId) ?: return
+        val entry = existing.copy(turns = existing.turns + ChatTurn("user", userText), status = ChatStatus.RUNNING)
+        chatHistoryStore.upsert(entry)
+        reloadHistory()
+        respondTo(entry, resumingAskUser = existing.status == ChatStatus.ASK_USER)
+    }
+
+    /**
+     * Routes one user turn. An answer to a paused ask_user resumes that SAME
+     * takeover run directly — a bare "yes" would otherwise misclassify as
+     * CHAT. Otherwise an LLM classifier decides: TASK hands off to
+     * [AssistActivity]'s agent loop (the translucent overlay only ever
+     * appears once a task is actually confirmed this way, or via the real
+     * ASSIST invocation over another app); CHAT stays a plain conversational
+     * reply, spoken and shown in place, same as before.
+     */
+    private fun respondTo(entry: ChatEntry, resumingAskUser: Boolean = false) {
         isThinking = true
         lifecycleScope.launch {
+            if (resumingAskUser) {
+                isThinking = false
+                startTakeover(entry.id, entry.task, entry.agentHistory + "User answered: ${entry.turns.last().text}")
+                return@launch
+            }
+
+            if (classifyAsTask(entry.turns)) {
+                isThinking = false
+                val taskText = entry.turns.filter { it.role == "user" }.joinToString(" ") { it.text }
+                startTakeover(entry.id, taskText)
+                return@launch
+            }
+
             val v = voicePreferences.settings
             val systemPrompt = CHAT_SYSTEM_PROMPT.replace("%LANGUAGE%", v.language.displayName)
             val result = llmClient.chatCompletion(
-                messages = listOf(
-                    ChatMessage(role = "system", content = systemPrompt),
-                    ChatMessage(role = "user", content = userText),
-                ),
+                messages = listOf(ChatMessage(role = "system", content = systemPrompt)) +
+                    entry.turns.map { ChatMessage(role = if (it.role == "user") "user" else "assistant", content = it.text) },
             )
             isThinking = false
 
@@ -269,6 +344,25 @@ class MainActivity : ComponentActivity() {
             val audio = bulbulClient.synthesize(replyText, v.language.code, v.speaker.id, v.pace)
             audio.onSuccess { narrationPlayer.play(it) }
         }
+    }
+
+    /** Defaults to CHAT (false) on any classifier failure — safer to stay conversational than to wrongly launch the agent loop against whatever's on screen. */
+    private suspend fun classifyAsTask(turns: List<ChatTurn>): Boolean {
+        val messages = listOf(ChatMessage(role = "system", content = INTENT_CLASSIFIER_PROMPT)) +
+            turns.map { ChatMessage(role = if (it.role == "user") "user" else "assistant", content = it.text) }
+        val result = llmClient.chatCompletion(messages = messages)
+        val label = result.getOrNull()?.choices?.firstOrNull()?.message?.content?.trim()?.uppercase().orEmpty()
+        return label.startsWith("TASK")
+    }
+
+    /** The only place [AssistActivity] is started from chat — same chat id, so the agent's own steps append into this same visible thread. */
+    private fun startTakeover(chatId: String, task: String, initialHistory: List<String> = emptyList()) {
+        val intent = Intent(this, AssistActivity::class.java).apply {
+            putExtra(AssistActivity.EXTRA_AGENT_TASK, task)
+            putExtra(AssistActivity.EXTRA_CHAT_ID, chatId)
+            putStringArrayListExtra(AssistActivity.EXTRA_AGENT_HISTORY, ArrayList(initialHistory))
+        }
+        startActivity(intent)
     }
 
     // --- Voice input alternative ---

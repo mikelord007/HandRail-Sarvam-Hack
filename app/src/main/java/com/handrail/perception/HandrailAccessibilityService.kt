@@ -126,10 +126,16 @@ class HandrailAccessibilityService : AccessibilityService() {
             // so there's something real to act on. GLOBAL_ACTION_HOME + the
             // launcher window actually attaching a root node was observed
             // occasionally taking longer than one 1500ms wait under load —
-            // retry a couple more times before giving up.
+            // retry a couple more times before giving up. Only press HOME
+            // once: a stray CONTENT_CHANGED event unrelated to the launcher
+            // (e.g. our own overlay closing) can satisfy awaitContentChanged
+            // well under 1500ms while the launcher's root still isn't
+            // queryable yet — re-pressing HOME on that retry was observed
+            // interrupting the very transition still in flight from the
+            // first press, burning all 3 retries in well under 200ms.
             Log.i(TAG, "captureScreen: no other app in the stack, going home first")
+            performGlobalAction(GLOBAL_ACTION_HOME)
             repeat(3) { attempt ->
-                performGlobalAction(GLOBAL_ACTION_HOME)
                 awaitContentChanged(1500L)
                 resolveTargetRoot()?.let { return it }
                 Log.w(TAG, "captureScreen: still no active window after going home (attempt ${attempt + 1})")
