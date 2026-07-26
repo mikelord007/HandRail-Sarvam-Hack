@@ -7,7 +7,7 @@ package com.handrail.speech
 data class VoiceSettings(
     val language: Language,
     val speaker: Speaker,
-    /** Bulbul `pace`: 1.0 normal, ~0.65 for "Speak slowly". Valid API range is up to 3.0. */
+    /** Bulbul `pace`: 1.0 normal, ~0.65 for "Speak slowly". `bulbul:v3` clamps to [0.5, 2.0]. */
     val pace: Float,
     val narrateEveryStep: Boolean,
 ) {
