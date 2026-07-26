@@ -44,6 +44,7 @@ import com.handrail.speech.Language
 import com.handrail.ui.components.Hairline
 import com.handrail.ui.components.HandrailTextField
 import com.handrail.ui.components.Kicker
+import com.handrail.ui.components.SendButton
 import com.handrail.ui.components.SuggestionChip
 import com.handrail.ui.formatRelativeTime
 import com.handrail.ui.icons.HandrailIcons
@@ -219,24 +220,6 @@ private fun HomeMicControl(isRecording: Boolean, isTranscribing: Boolean, onClic
                 modifier = Modifier.size(46.dp),
             )
         }
-    }
-}
-
-@Composable
-private fun SendButton(onClick: () -> Unit) {
-    Box(
-        modifier = Modifier
-            .size(48.dp)
-            .border(1.dp, HandrailColors.Accent, androidx.compose.foundation.shape.RoundedCornerShape(4.dp))
-            .clickable(onClick = onClick),
-        contentAlignment = Alignment.Center,
-    ) {
-        Icon(
-            imageVector = HandrailIcons.ArrowRight,
-            contentDescription = "Send",
-            tint = HandrailColors.Accent,
-            modifier = Modifier.size(18.dp),
-        )
     }
 }
 

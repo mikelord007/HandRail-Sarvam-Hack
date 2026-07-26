@@ -27,7 +27,9 @@ import com.handrail.chat.ChatEntry
 import com.handrail.chat.ChatStatus
 import com.handrail.chat.ChatTurn
 import com.handrail.ui.components.Hairline
+import com.handrail.ui.components.HandrailTextField
 import com.handrail.ui.components.Kicker
+import com.handrail.ui.components.SendButton
 import com.handrail.ui.icons.HandrailIcons
 import com.handrail.ui.theme.HandrailColors
 import com.handrail.ui.theme.HandrailType
@@ -36,10 +38,18 @@ import com.handrail.ui.theme.HandrailType
  * The screen the design doesn't have: a Conversations row's destination.
  * Drawn as hairline-separated turns in the design's own type system — no
  * chat bubbles, per the deviations table — since a bubble list is exactly
- * the un-styled look this whole port is replacing.
+ * the un-styled look this whole port is replacing. Carries its own message
+ * row so a thread can keep going here — chat for a while, then ask for a
+ * task, all in the same conversation — instead of being read-only.
  */
 @Composable
-fun ThreadDetailScreen(entry: ChatEntry?, onBack: () -> Unit) {
+fun ThreadDetailScreen(
+    entry: ChatEntry?,
+    onBack: () -> Unit,
+    draft: String,
+    onDraftChange: (String) -> Unit,
+    onSend: () -> Unit,
+) {
     Column(modifier = Modifier.fillMaxSize()) {
         Row(
             modifier = Modifier
@@ -78,6 +88,26 @@ fun ThreadDetailScreen(entry: ChatEntry?, onBack: () -> Unit) {
             if (entry.status == ChatStatus.RUNNING) {
                 item { ThinkingRow() }
             }
+        }
+
+        Hairline()
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(start = 22.dp, end = 22.dp, top = 12.dp, bottom = 18.dp),
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.spacedBy(10.dp),
+        ) {
+            val busy = entry.status == ChatStatus.RUNNING
+            HandrailTextField(
+                value = draft,
+                onValueChange = onDraftChange,
+                modifier = Modifier.weight(1f),
+                placeholder = "Reply or ask for something else",
+                enabled = !busy,
+                onSend = onSend,
+            )
+            SendButton(onClick = onSend)
         }
     }
 }
