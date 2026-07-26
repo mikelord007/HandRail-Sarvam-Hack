@@ -11,7 +11,7 @@ import androidx.compose.ui.unit.dp
 import com.handrail.ui.theme.HandrailColors
 
 /**
- * The six Lucide (lucide.dev, ISC license) icons the design uses, hand-built
+ * The seven Lucide (lucide.dev, ISC license) icons the design uses, hand-built
  * as [ImageVector]s rather than pulled in via material-icons-extended (a new
  * dependency for the wrong icon language) or res/drawable (harder to tint
  * per-caller). Paths are transcribed from the prototype's inlined SVGs:
@@ -205,6 +205,27 @@ object HandrailIcons {
             }
             path(fill = null, stroke = SolidColor(HandrailColors.Accent), strokeLineWidth = 2.5f, strokeLineCap = StrokeCap.Round) {
                 moveTo(87f, 41f); lineTo(87f, 52.5f)
+            }
+        }.build()
+    }
+
+    /** The "Heard you" check badge on [com.handrail.ui.screens.InvokeSheet]'s second state. */
+    val Check: ImageVector by lazy {
+        ImageVector.Builder(
+            name = "Check",
+            defaultWidth = 24.dp,
+            defaultHeight = 24.dp,
+            viewportWidth = 24f,
+            viewportHeight = 24f,
+        ).apply {
+            path(
+                fill = null,
+                stroke = placeholder,
+                strokeLineWidth = 2f,
+                strokeLineCap = StrokeCap.Round,
+                strokeLineJoin = StrokeJoin.Round,
+            ) {
+                moveTo(20f, 6f); lineTo(9f, 17f); lineTo(4f, 12f)
             }
         }.build()
     }

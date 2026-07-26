@@ -99,6 +99,17 @@
     <string name="state_speaking">Speaking</string>
     <string name="state_acting">Acting</string>
 
+    <!-- Invoke sheet (VoiceInteractionSession) -->
+    <string name="invoke_listening_title">I\'m listening.</string>
+    <string name="invoke_listening_prompt">Say what you want, in %1$s.</string>
+    <string name="invoke_read_screen_button">Read this screen aloud</string>
+    <string name="invoke_do_task_button">Do a task for me</string>
+    <string name="invoke_hold_home_hint">Hold home any time</string>
+    <string name="invoke_heard_you">Heard you</string>
+    <string name="invoke_heard_promise">I stop before paying — you make the last tap.</string>
+    <string name="invoke_confirm_button">Yes, go ahead</string>
+    <string name="invoke_retry_button">No, let me say it again</string>
+
     <!-- Onboarding: Welcome -->
     <string name="welcome_kicker">Hold on. I\'ll walk you through.</string>
     <string name="welcome_body">Tell me what you want to do, in your language. I read the screen aloud, or I do the tapping for you — and I say every step before I take it.</string>

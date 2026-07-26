@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  Metadata for HandrailInteractionService (android.voice_interaction).
+  sessionService/recognitionService must both resolve to real declared
+  services — see AndroidManifest.xml — or the platform refuses to offer
+  Handrail as a "Digital assistant app" candidate at all.
+-->
+<voice-interaction-service xmlns:android="http://schemas.android.com/apk/res/android"
+    android:sessionService="com.handrail.ui.HandrailInteractionSessionService"
+    android:recognitionService="com.handrail.ui.HandrailRecognitionService"
+    android:supportsAssist="true" />

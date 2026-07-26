@@ -46,6 +46,46 @@
                 android:resource="@xml/accessibility_service_config" />
         </service>
 
+        <!--
+          The default-assistant entry point: long-press home / the gesture-nav
+          assist swipe arrives here as a voice-interaction session request, not
+          an activity launch. See HandrailInteractionSession's doc for how this
+          relates to AssistActivity's separate ASSIST-intent entry point above.
+        -->
+        <service
+            android:name=".ui.HandrailInteractionService"
+            android:exported="true"
+            android:permission="android.permission.BIND_VOICE_INTERACTION">
+            <intent-filter>
+                <action android:name="android.service.voice.VoiceInteractionService" />
+            </intent-filter>
+            <meta-data
+                android:name="android.voice_interaction"
+                android:resource="@xml/interaction_service" />
+        </service>
+
+        <service
+            android:name=".ui.HandrailInteractionSessionService"
+            android:exported="true"
+            android:permission="android.permission.BIND_VOICE_INTERACTION" />
+
+        <!--
+          Required to exist by the interaction service's recognitionService
+          reference above; Handrail's real STT is Saaras, called directly from
+          HandrailInteractionSession, not through this. See its doc.
+        -->
+        <service
+            android:name=".ui.HandrailRecognitionService"
+            android:exported="true"
+            android:permission="android.permission.BIND_VOICE_RECOGNITION">
+            <intent-filter>
+                <action android:name="android.speech.RecognitionService" />
+            </intent-filter>
+            <meta-data
+                android:name="android.speech"
+                android:resource="@xml/recognition_service" />
+        </service>
+
     </application>
 
 </manifest>

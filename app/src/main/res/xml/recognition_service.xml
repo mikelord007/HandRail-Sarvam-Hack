@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  Metadata for HandrailRecognitionService (android.speech). Required to exist
+  by the VoiceInteractionService contract's recognitionService reference —
+  Handrail does not actually use it for STT (Saaras does, from inside
+  HandrailInteractionSession); see that class's doc.
+-->
+<recognition-service xmlns:android="http://schemas.android.com/apk/res/android" />
