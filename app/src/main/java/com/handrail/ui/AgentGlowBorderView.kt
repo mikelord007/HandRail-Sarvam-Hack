@@ -28,12 +28,24 @@ class AgentGlowBorderView(context: Context) : View(context) {
     private val glowColor = Color.parseColor("#B68235")
     private val strokeWidthPx = 10f * resources.displayMetrics.density
     private val blurRadiusPx = 22f * resources.displayMetrics.density
+    private val coreStrokeWidthPx = 4f * resources.displayMetrics.density
+    private val coreBlurRadiusPx = 6f * resources.displayMetrics.density
 
+    // Wide, heavily-blurred bloom.
     private val paint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
         style = Paint.Style.STROKE
         strokeWidth = strokeWidthPx
         color = glowColor
         maskFilter = BlurMaskFilter(blurRadiusPx, BlurMaskFilter.Blur.NORMAL)
+    }
+
+    // Thin, lightly-blurred core drawn on top so the edge itself reads bright
+    // instead of just a soft ambient wash.
+    private val corePaint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
+        style = Paint.Style.STROKE
+        strokeWidth = coreStrokeWidthPx
+        color = Color.WHITE
+        maskFilter = BlurMaskFilter(coreBlurRadiusPx, BlurMaskFilter.Blur.NORMAL)
     }
 
     // BlurMaskFilter only renders on a software layer — hardware layers ignore it.
@@ -47,7 +59,9 @@ class AgentGlowBorderView(context: Context) : View(context) {
         repeatCount = ValueAnimator.INFINITE
         interpolator = LinearInterpolator()
         addUpdateListener {
-            paint.alpha = it.animatedValue as Int
+            val alpha = it.animatedValue as Int
+            paint.alpha = alpha
+            corePaint.alpha = (alpha * CORE_ALPHA_SCALE).toInt()
             invalidate()
         }
     }
@@ -66,11 +80,13 @@ class AgentGlowBorderView(context: Context) : View(context) {
         super.onDraw(canvas)
         val inset = strokeWidthPx / 2f
         canvas.drawRect(inset, inset, width - inset, height - inset, paint)
+        canvas.drawRect(inset, inset, width - inset, height - inset, corePaint)
     }
 
     private companion object {
         const val PULSE_DURATION_MS = 900L
-        const val MIN_ALPHA = 70
+        const val MIN_ALPHA = 120
         const val MAX_ALPHA = 255
+        const val CORE_ALPHA_SCALE = 0.85f
     }
 }
