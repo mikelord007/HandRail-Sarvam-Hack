@@ -24,6 +24,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.em
 import androidx.compose.ui.unit.sp
 import com.handrail.chat.ChatEntry
+import com.handrail.chat.ChatStatus
 import com.handrail.chat.ChatTurn
 import com.handrail.ui.components.Hairline
 import com.handrail.ui.components.Kicker
@@ -74,7 +75,23 @@ fun ThreadDetailScreen(entry: ChatEntry?, onBack: () -> Unit) {
 
         LazyColumn(modifier = Modifier.weight(1f).fillMaxWidth().padding(horizontal = 22.dp)) {
             items(entry.turns) { turn -> TurnRow(turn) }
+            if (entry.status == ChatStatus.RUNNING) {
+                item { ThinkingRow() }
+            }
         }
+    }
+}
+
+@Composable
+private fun ThinkingRow() {
+    Column(modifier = Modifier.fillMaxWidth().padding(vertical = 14.dp)) {
+        Kicker(text = "Handrail", fontSize = 12.sp, letterSpacing = 0.18.em, color = HandrailColors.Accent700)
+        Spacer(Modifier.height(6.dp))
+        Text(
+            text = "Thinking…",
+            style = TextStyle(fontFamily = HandrailType.Lora, fontSize = 15.5.sp, lineHeight = 23.sp),
+            color = HandrailColors.Neutral600,
+        )
     }
 }
 

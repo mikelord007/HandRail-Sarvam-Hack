@@ -143,6 +143,7 @@ fun HomeScreen(
                 onValueChange = onDraftChange,
                 modifier = Modifier.weight(1f),
                 placeholder = "or type it instead",
+                onSend = onSend,
             )
             SendButton(onClick = onSend)
         }

@@ -13,7 +13,6 @@ import androidx.activity.compose.setContent
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.lifecycleScope
@@ -84,6 +83,9 @@ class MainActivity : ComponentActivity() {
     private var speakSlowly by mutableStateOf(false)
     private var permissions by mutableStateOf(Permissions(microphone = false, accessibility = false, defaultAssistant = false))
 
+    /** A class field, not a `remember` inside setContent, so [submitTask] can navigate to the new thread as soon as it's created. */
+    private lateinit var nav: HandrailNav
+
     /** Home's mic control — starts a takeover/narration task, so a grant here should immediately start recording. */
     private val requestMicPermission = registerForActivityResult(
         ActivityResultContracts.RequestPermission(),
@@ -102,10 +104,9 @@ class MainActivity : ComponentActivity() {
         selectedSpeaker = voicePreferences.speaker
         narrateEveryStep = voicePreferences.narrateEveryStep
         speakSlowly = voicePreferences.speakSlowly
+        nav = HandrailNav(if (onboardingPreferences.isComplete) Screen.Home else Screen.Welcome)
 
         setContent {
-            val nav = remember { HandrailNav(if (onboardingPreferences.isComplete) Screen.Home else Screen.Welcome) }
-
             HandrailTheme {
                 BackHandler(enabled = nav.canGoBack) { nav.back() }
 
@@ -214,7 +215,9 @@ class MainActivity : ComponentActivity() {
      * The translucent takeover/narration overlay ([AssistActivity]) is
      * reserved for the real ASSIST invocation (long-press home) over
      * whatever app/screen is in the foreground at the time; chatting on
-     * Handrail's own Home screen never leaves this Activity.
+     * Handrail's own Home screen never leaves this Activity. Navigates to
+     * the new entry's [ThreadDetailScreen] immediately, before the reply
+     * arrives, so the exchange plays out live like a normal chat.
      */
     private fun submitTask(userText: String) {
         val entry = ChatEntry(
@@ -226,6 +229,7 @@ class MainActivity : ComponentActivity() {
         )
         chatHistoryStore.upsert(entry)
         reloadHistory()
+        nav.go(Screen.ThreadDetail(entry.id))
 
         isThinking = true
         lifecycleScope.launch {
@@ -242,9 +246,10 @@ class MainActivity : ComponentActivity() {
             val replyText = result.getOrNull()?.choices?.firstOrNull()?.message?.content?.trim().orEmpty()
             if (result.isFailure || replyText.isEmpty()) {
                 Log.e(TAG, "Chat reply failed", result.exceptionOrNull())
-                chatHistoryStore.upsert(entry.copy(status = ChatStatus.ERROR))
+                val errorText = ErrorPhrases.couldNotDoThat(v.language.code)
+                chatHistoryStore.upsert(entry.copy(turns = entry.turns + ChatTurn("assistant", errorText), status = ChatStatus.ERROR))
                 reloadHistory()
-                val audio = bulbulClient.synthesize(ErrorPhrases.couldNotDoThat(v.language.code), v.language.code, v.speaker.id, v.pace)
+                val audio = bulbulClient.synthesize(errorText, v.language.code, v.speaker.id, v.pace)
                 audio.onSuccess { narrationPlayer.play(it) }
                 return@launch
             }

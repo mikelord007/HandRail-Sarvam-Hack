@@ -8,6 +8,8 @@ import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.BasicTextField
+import androidx.compose.foundation.text.KeyboardActions
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -20,6 +22,7 @@ import androidx.compose.ui.focus.onFocusChanged
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -40,6 +43,7 @@ fun HandrailTextField(
     placeholder: String = "",
     height: Dp = 48.dp,
     enabled: Boolean = true,
+    onSend: (() -> Unit)? = null,
 ) {
     var focused by remember { mutableStateOf(false) }
     val borderColor = if (focused) HandrailColors.Accent else HandrailColors.Divider
@@ -51,6 +55,8 @@ fun HandrailTextField(
         singleLine = true,
         textStyle = TextStyle(fontFamily = HandrailType.Lora, fontSize = 16.sp, color = HandrailColors.Text),
         cursorBrush = SolidColor(HandrailColors.Accent),
+        keyboardOptions = KeyboardOptions(imeAction = if (onSend != null) ImeAction.Send else ImeAction.Default),
+        keyboardActions = KeyboardActions(onSend = { onSend?.invoke() }),
         modifier = modifier
             .fillMaxWidth()
             .heightIn(min = height)
