@@ -83,9 +83,19 @@ dependencies {
     implementation("androidx.activity:activity-compose:1.9.0")
     implementation("androidx.lifecycle:lifecycle-runtime-ktx:2.8.2")
 
+    // HandrailInteractionSession hosts a ComposeView outside any Activity —
+    // VoiceInteractionSession provides none of the ViewModelStoreOwner /
+    // SavedStateRegistryOwner scaffolding an Activity normally gives Compose
+    // for free, so the session supplies both itself using these.
+    implementation("androidx.lifecycle:lifecycle-viewmodel-ktx:2.8.2")
+    implementation("androidx.savedstate:savedstate-ktx:1.2.1")
+
     // OkHttp + kotlinx.serialization: plain HTTP client against the shared
     // OpenAI-compatible chat-completions format. No LLM SDK.
     implementation("com.squareup.okhttp3:okhttp:4.12.0")
     implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.6.3")
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.8.1")
+
+    // Plain JUnit4 for pure-Kotlin logic tests (e.g. IrreversibleActionGuard) — no Android framework/Robolectric needed.
+    testImplementation("junit:junit:4.13.2")
 }
