@@ -18,9 +18,9 @@
     <string name="home_caption_transcribing">लिहीत आहे…</string>
     <string name="home_caption_thinking">विचार करत आहे…</string>
     <string name="home_caption_tap_and_speak">टॅप करून बोला · %1$s</string>
-    <string name="suggestion_book_cab">घरी जाण्यासाठी कॅब बुक करा</string>
+    <string name="suggestion_search_weather">क्रोममध्ये हवामान शोधा</string>
     <string name="suggestion_read_screen">ही स्क्रीन मला वाचून दाखवा</string>
-    <string name="suggestion_pay_bill">वीज बिल भरा</string>
+    <string name="suggestion_search_cricket">क्रोममध्ये क्रिकेट स्कोअर पहा</string>
     <string name="home_text_placeholder">किंवा त्याऐवजी टाइप करा</string>
     <string name="earlier_today">आज आधी</string>
     <string name="all">सर्व</string>
