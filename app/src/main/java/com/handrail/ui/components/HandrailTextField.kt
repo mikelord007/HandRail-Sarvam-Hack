@@ -1,0 +1,74 @@
+package com.handrail.ui.components
+
+import androidx.compose.foundation.background
+import androidx.compose.foundation.border
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.heightIn
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.text.BasicTextField
+import androidx.compose.material3.Text
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.focus.onFocusChanged
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.SolidColor
+import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.unit.Dp
+import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
+import com.handrail.ui.theme.HandrailColors
+import com.handrail.ui.theme.HandrailDimens
+import com.handrail.ui.theme.HandrailType
+
+/**
+ * The plain outlined text field used for "or type it instead" on Home — a
+ * hairline border that turns gold on focus, gold caret, no Material fill
+ * or floating label.
+ */
+@Composable
+fun HandrailTextField(
+    value: String,
+    onValueChange: (String) -> Unit,
+    modifier: Modifier = Modifier,
+    placeholder: String = "",
+    height: Dp = 48.dp,
+    enabled: Boolean = true,
+) {
+    var focused by remember { mutableStateOf(false) }
+    val borderColor = if (focused) HandrailColors.Accent else HandrailColors.Divider
+
+    BasicTextField(
+        value = value,
+        onValueChange = onValueChange,
+        enabled = enabled,
+        singleLine = true,
+        textStyle = TextStyle(fontFamily = HandrailType.Lora, fontSize = 16.sp, color = HandrailColors.Text),
+        cursorBrush = SolidColor(HandrailColors.Accent),
+        modifier = modifier
+            .fillMaxWidth()
+            .heightIn(min = height)
+            .onFocusChanged { focused = it.isFocused }
+            .background(Color.Transparent, RoundedCornerShape(HandrailDimens.RadiusMd))
+            .border(1.dp, borderColor, RoundedCornerShape(HandrailDimens.RadiusMd))
+            .padding(horizontal = 10.dp, vertical = 6.dp),
+        decorationBox = { innerTextField ->
+            Box(contentAlignment = Alignment.CenterStart) {
+                if (value.isEmpty()) {
+                    Text(
+                        text = placeholder,
+                        style = TextStyle(fontFamily = HandrailType.Lora, fontSize = 16.sp),
+                        color = HandrailColors.Neutral600,
+                    )
+                }
+                innerTextField()
+            }
+        },
+    )
+}
