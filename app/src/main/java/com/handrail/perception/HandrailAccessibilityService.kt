@@ -11,7 +11,10 @@ import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
 import android.content.IntentFilter
+import android.graphics.PixelFormat
 import android.util.Log
+import android.view.Gravity
+import android.view.WindowManager
 import android.view.accessibility.AccessibilityEvent
 import android.view.accessibility.AccessibilityNodeInfo
 import android.view.accessibility.AccessibilityWindowInfo
@@ -20,6 +23,7 @@ import com.handrail.BuildConfig
 import com.handrail.actions.ActionExecutor
 import com.handrail.actions.ActionResult
 import com.handrail.actions.ScrollDirection
+import com.handrail.ui.AgentGlowBorderView
 import kotlinx.coroutines.CompletableDeferred
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -36,6 +40,7 @@ class HandrailAccessibilityService : AccessibilityService() {
     private val contentChangeWaiters = mutableListOf<CompletableDeferred<Unit>>()
     private val serviceScope = CoroutineScope(SupervisorJob() + Dispatchers.Main)
     private val perceptionMutex = Mutex()
+    private var glowBorderView: AgentGlowBorderView? = null
 
     /**
      * A CoroutineScope that outlives any particular Activity. The agent loop
@@ -83,10 +88,56 @@ class HandrailAccessibilityService : AccessibilityService() {
         if (BuildConfig.DEBUG) {
             unregisterReceiver(debugActionReceiver)
         }
+        hideAgentGlow()
         serviceScope.cancel()
         instance = null
         super.onDestroy()
     }
+
+    /**
+     * Golden pulsing border shown while a Takeover task is actively running.
+     * Added here rather than to AssistActivity's own window because that
+     * window backgrounds every time the agent taps into another app — an
+     * accessibility service can add a TYPE_ACCESSIBILITY_OVERLAY window
+     * (no SYSTEM_ALERT_WINDOW permission needed) that survives those
+     * switches, so it's the only place this cue can actually live. Callers
+     * must be on the main thread — see AssistActivity's note on
+     * [backgroundScope] dispatching on Dispatchers.Main.
+     */
+    fun showAgentGlow() {
+        if (glowBorderView != null) return
+        val view = AgentGlowBorderView(this)
+        val params = WindowManager.LayoutParams(
+            WindowManager.LayoutParams.MATCH_PARENT,
+            WindowManager.LayoutParams.MATCH_PARENT,
+            WindowManager.LayoutParams.TYPE_ACCESSIBILITY_OVERLAY,
+            WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE or
+                WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE or
+                WindowManager.LayoutParams.FLAG_LAYOUT_IN_SCREEN or
+                WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS,
+            PixelFormat.TRANSLUCENT,
+        ).apply { gravity = Gravity.TOP or Gravity.START }
+        try {
+            windowManager.addView(view, params)
+            glowBorderView = view
+        } catch (e: Exception) {
+            Log.e(TAG, "Failed to add agent glow overlay", e)
+        }
+    }
+
+    /** Stop condition (done/blocked/ask_user/error) or cancellation — see AssistActivity's onEvent handling and onStopRequested. */
+    fun hideAgentGlow() {
+        val view = glowBorderView ?: return
+        glowBorderView = null
+        try {
+            windowManager.removeView(view)
+        } catch (e: Exception) {
+            Log.e(TAG, "Failed to remove agent glow overlay", e)
+        }
+    }
+
+    private val windowManager: WindowManager
+        get() = getSystemService(WINDOW_SERVICE) as WindowManager
 
     /**
      * Serialized via a mutex: two overlapping captureScreen() calls (e.g.

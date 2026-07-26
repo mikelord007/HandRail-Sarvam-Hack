@@ -383,6 +383,11 @@ class AssistActivity : ComponentActivity() {
         }
 
         var maxStepSeen = 0
+        // Golden border on the accessibility service's own overlay window,
+        // not this Activity's — this Activity backgrounds on every step that
+        // navigates into another app, so a glow tied to its window would
+        // vanish the moment there's anything else to see it react to.
+        service.showAgentGlow()
         // Runs in the service's scope, not lifecycleScope: this Activity gets
         // backgrounded every time a step navigates into another app, which
         // would otherwise cancel the loop mid-task. That scope dispatches on
@@ -401,6 +406,7 @@ class AssistActivity : ComponentActivity() {
                         appendChatTurn(resolvedChatId, event.description, ChatStatus.RUNNING, stepCount = maxStepSeen)
                     }
                     is AgentEvent.Done -> {
+                        service.hideAgentGlow()
                         pendingAgentContext = null
                         voiceState = VoiceState.Speaking
                         narrationLine = event.summary
@@ -408,6 +414,10 @@ class AssistActivity : ComponentActivity() {
                         appendChatTurn(resolvedChatId, event.summary, ChatStatus.DONE, stepCount = maxStepSeen)
                     }
                     is AgentEvent.AskUser -> {
+                        // Waiting on the user, not actively acting — glow
+                        // pauses same as a real block, resumes via a fresh
+                        // showAgentGlow() when the answer restarts the loop.
+                        service.hideAgentGlow()
                         // Resumable: tapping the caption (see onTapToAnswer)
                         // or typing on the next Home visit answers this and
                         // continues the SAME task, instead of starting a
@@ -419,6 +429,7 @@ class AssistActivity : ComponentActivity() {
                         appendChatTurn(resolvedChatId, event.question, ChatStatus.ASK_USER, event.history, stepCount = maxStepSeen)
                     }
                     is AgentEvent.Blocked -> {
+                        service.hideAgentGlow()
                         // Genuine hard stop — never auto-resumed. Only the
                         // guard's own trip gets the gold hand-back card; the
                         // other three causes are failures, not a safety beat.
@@ -442,6 +453,7 @@ class AssistActivity : ComponentActivity() {
                         }
                     }
                     is AgentEvent.Error -> {
+                        service.hideAgentGlow()
                         pendingAgentContext = null
                         showIdleMessage(event.message)
                         appendChatTurn(resolvedChatId, event.message, ChatStatus.ERROR, stepCount = maxStepSeen)
@@ -488,6 +500,9 @@ class AssistActivity : ComponentActivity() {
     /** Stop / × / "No, stop" / system back — all cancel whatever's running and get out of the way. */
     private fun onStopRequested() {
         agentJob?.cancel()
+        // Cancellation skips straight past the loop's own onEvent branches
+        // (that's what cancel() means), so the glow needs its own hide here.
+        HandrailAccessibilityService.instance?.hideAgentGlow()
         player.stop()
         finish()
     }
