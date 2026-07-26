@@ -7,6 +7,9 @@
 package com.handrail.perception
 
 import android.accessibilityservice.AccessibilityService
+import android.app.NotificationChannel
+import android.app.NotificationManager
+import android.app.PendingIntent
 import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
@@ -18,8 +21,11 @@ import android.view.WindowManager
 import android.view.accessibility.AccessibilityEvent
 import android.view.accessibility.AccessibilityNodeInfo
 import android.view.accessibility.AccessibilityWindowInfo
+import androidx.core.app.NotificationCompat
+import androidx.core.app.NotificationManagerCompat
 import androidx.core.content.ContextCompat
 import com.handrail.BuildConfig
+import com.handrail.R
 import com.handrail.actions.ActionExecutor
 import com.handrail.actions.ActionResult
 import com.handrail.actions.ScrollDirection
@@ -27,6 +33,7 @@ import com.handrail.ui.AgentGlowBorderView
 import kotlinx.coroutines.CompletableDeferred
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Job
 import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.cancel
 import kotlinx.coroutines.launch
@@ -42,6 +49,9 @@ class HandrailAccessibilityService : AccessibilityService() {
     private val perceptionMutex = Mutex()
     private var glowBorderView: AgentGlowBorderView? = null
 
+    /** The currently-running Takeover job, if any — set via [trackAgentJob], cancelled via [stopActiveAgentTask]. */
+    private var activeAgentJob: Job? = null
+
     /**
      * A CoroutineScope that outlives any particular Activity. The agent loop
      * must run here, not in an Activity's lifecycleScope — Takeover tasks
@@ -56,6 +66,13 @@ class HandrailAccessibilityService : AccessibilityService() {
         super.onServiceConnected()
         instance = this
         Log.i(TAG, "Handrail accessibility service connected")
+        createNotificationChannel()
+        ContextCompat.registerReceiver(
+            this,
+            stopTaskReceiver,
+            IntentFilter(ACTION_STOP_TASK),
+            ContextCompat.RECEIVER_NOT_EXPORTED,
+        )
         if (BuildConfig.DEBUG) {
             ContextCompat.registerReceiver(
                 this,
@@ -85,10 +102,12 @@ class HandrailAccessibilityService : AccessibilityService() {
     }
 
     override fun onDestroy() {
+        unregisterReceiver(stopTaskReceiver)
         if (BuildConfig.DEBUG) {
             unregisterReceiver(debugActionReceiver)
         }
         hideAgentGlow()
+        hideTaskNotification()
         serviceScope.cancel()
         instance = null
         super.onDestroy()
@@ -105,6 +124,7 @@ class HandrailAccessibilityService : AccessibilityService() {
      * [backgroundScope] dispatching on Dispatchers.Main.
      */
     fun showAgentGlow() {
+        showTaskNotification()
         if (glowBorderView != null) return
         val view = AgentGlowBorderView(this)
         val params = WindowManager.LayoutParams(
@@ -127,12 +147,82 @@ class HandrailAccessibilityService : AccessibilityService() {
 
     /** Stop condition (done/blocked/ask_user/error) or cancellation — see AssistActivity's onEvent handling and onStopRequested. */
     fun hideAgentGlow() {
+        hideTaskNotification()
         val view = glowBorderView ?: return
         glowBorderView = null
         try {
             windowManager.removeView(view)
         } catch (e: Exception) {
             Log.e(TAG, "Failed to remove agent glow overlay", e)
+        }
+    }
+
+    /**
+     * Registers the job driving the currently-running Takeover task so
+     * [stopActiveAgentTask] — called from either the in-overlay Stop button
+     * or this notification's Stop action — can cancel the right one. Must be
+     * called once per task, right after launching it on [backgroundScope].
+     */
+    fun trackAgentJob(job: Job) {
+        activeAgentJob = job
+    }
+
+    /**
+     * Cancels whatever Takeover task is running. This is the ONLY way to
+     * stop a task once a step has navigated into another app and
+     * backgrounded AssistActivity — that's exactly when the notification's
+     * Stop action (routed here via [stopTaskReceiver]) matters; the
+     * in-overlay Stop button covers the case where the Activity is still
+     * visible. Safe to call with nothing running.
+     */
+    fun stopActiveAgentTask() {
+        activeAgentJob?.cancel()
+        activeAgentJob = null
+        hideAgentGlow()
+    }
+
+    private fun showTaskNotification() {
+        val stopIntent = PendingIntent.getBroadcast(
+            this,
+            0,
+            Intent(ACTION_STOP_TASK).setPackage(packageName),
+            PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE,
+        )
+        val notification = NotificationCompat.Builder(this, NOTIFICATION_CHANNEL_ID)
+            .setSmallIcon(R.drawable.ic_launcher_foreground)
+            .setContentTitle(getString(R.string.notification_takeover_title))
+            .setContentText(getString(R.string.notification_takeover_text))
+            .setOngoing(true)
+            .setOnlyAlertOnce(true)
+            .setPriority(NotificationCompat.PRIORITY_LOW)
+            .addAction(0, getString(R.string.stop_label), stopIntent)
+            .build()
+        try {
+            NotificationManagerCompat.from(this).notify(TASK_NOTIFICATION_ID, notification)
+        } catch (e: SecurityException) {
+            // POST_NOTIFICATIONS not granted — the in-overlay Stop button still works whenever AssistActivity is visible.
+            Log.w(TAG, "Notification permission not granted; task-stop notification not shown", e)
+        }
+    }
+
+    private fun hideTaskNotification() {
+        NotificationManagerCompat.from(this).cancel(TASK_NOTIFICATION_ID)
+    }
+
+    private fun createNotificationChannel() {
+        val channel = NotificationChannel(
+            NOTIFICATION_CHANNEL_ID,
+            getString(R.string.notification_channel_takeover_name),
+            NotificationManager.IMPORTANCE_LOW,
+        )
+        getSystemService(NotificationManager::class.java).createNotificationChannel(channel)
+    }
+
+    /** Handles the Stop action tapped on the task-running notification — the counterpart to AssistActivity's in-overlay Stop button for when the Activity is backgrounded. */
+    private val stopTaskReceiver = object : BroadcastReceiver() {
+        override fun onReceive(context: Context, intent: Intent) {
+            Log.i(TAG, "Stop requested from notification")
+            stopActiveAgentTask()
         }
     }
 
@@ -280,6 +370,9 @@ class HandrailAccessibilityService : AccessibilityService() {
     companion object {
         private const val TAG = "HandrailA11yService"
         private const val DEBUG_ACTION_INTENT = "com.handrail.debug.ACTION"
+        private const val ACTION_STOP_TASK = "com.handrail.action.STOP_TASK"
+        private const val NOTIFICATION_CHANNEL_ID = "takeover_task"
+        private const val TASK_NOTIFICATION_ID = 1
 
         var instance: HandrailAccessibilityService? = null
             private set

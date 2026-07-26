@@ -4,6 +4,7 @@ import android.Manifest
 import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
+import android.os.Build
 import android.os.Bundle
 import android.util.Log
 import android.view.Gravity
@@ -103,6 +104,19 @@ class AssistActivity : ComponentActivity() {
             // Log/internal only — SttState.Error's message is never rendered; the user hears ErrorPhrases via speakErrorAsync().
             sttState = SttState.Error("Microphone permission denied")
             speakErrorAsync()
+        }
+    }
+
+    /** No-op either way: the notification is what lets a task be stopped after it backgrounds this Activity, but the in-overlay Stop button still works if this is denied — nothing to fall back to here. */
+    private val requestNotificationPermission = registerForActivityResult(
+        ActivityResultContracts.RequestPermission(),
+    ) {}
+
+    /** Fire-and-forget, called once per takeover start — Android only shows the system prompt once per denial anyway. */
+    private fun requestNotificationPermissionIfNeeded() {
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.TIRAMISU) return
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.POST_NOTIFICATIONS) != PackageManager.PERMISSION_GRANTED) {
+            requestNotificationPermission.launch(Manifest.permission.POST_NOTIFICATIONS)
         }
     }
 
@@ -386,6 +400,7 @@ class AssistActivity : ComponentActivity() {
         // not this Activity's — this Activity backgrounds on every step that
         // navigates into another app, so a glow tied to its window would
         // vanish the moment there's anything else to see it react to.
+        requestNotificationPermissionIfNeeded()
         service.showAgentGlow()
         // Runs in the service's scope, not lifecycleScope: this Activity gets
         // backgrounded every time a step navigates into another app, which
@@ -460,6 +475,10 @@ class AssistActivity : ComponentActivity() {
                 }
             }
         }
+        // So the task-running notification's Stop action (the only way to
+        // cancel once a step has backgrounded this Activity) can cancel the
+        // right job — see HandrailAccessibilityService.stopActiveAgentTask.
+        service.trackAgentJob(agentJob!!)
     }
 
     private fun appendChatTurn(
@@ -496,12 +515,15 @@ class AssistActivity : ComponentActivity() {
         finish()
     }
 
-    /** Stop / × / "No, stop" / system back — all cancel whatever's running and get out of the way. */
+    /**
+     * Stop / × / "No, stop" / system back — all cancel whatever's running and
+     * get out of the way. Routed through the service (which also backs the
+     * notification's Stop action, see [HandrailAccessibilityService.stopActiveAgentTask])
+     * rather than cancelling [agentJob] directly, so both entry points share
+     * one cancellation path.
+     */
     private fun onStopRequested() {
-        agentJob?.cancel()
-        // Cancellation skips straight past the loop's own onEvent branches
-        // (that's what cancel() means), so the glow needs its own hide here.
-        HandrailAccessibilityService.instance?.hideAgentGlow()
+        HandrailAccessibilityService.instance?.stopActiveAgentTask()
         player.stop()
         finish()
     }

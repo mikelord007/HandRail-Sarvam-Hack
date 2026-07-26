@@ -99,6 +99,11 @@
     <string name="state_speaking">Speaking</string>
     <string name="state_acting">Acting</string>
 
+    <!-- Takeover-task notification: the only Stop control once a step has navigated into another app and backgrounded AssistActivity -->
+    <string name="notification_channel_takeover_name">Takeover task</string>
+    <string name="notification_takeover_title">Handrail is working on your task</string>
+    <string name="notification_takeover_text">Tap Stop to cancel</string>
+
     <!-- Invoke sheet (VoiceInteractionSession) -->
     <string name="invoke_listening_title">I\'m listening.</string>
     <string name="invoke_listening_prompt">Say what you want, in %1$s.</string>
