@@ -73,11 +73,17 @@ class AgentLoop(
 
         for (step in 1..MAX_STEPS) {
             var perception = service.captureScreen(goHomeIfEmpty = step == 1)
-            // A window with zero actionable elements after step 1 is usually
-            // an app mid-launch (e.g. a splash screen) rather than a genuine
-            // dead end — give it a moment to finish rendering before bailing.
+            // A window with zero actionable elements (or no root at all) is
+            // usually something still mid-render — an app launching, or on
+            // step 1, the launcher not yet settled after GLOBAL_ACTION_HOME —
+            // rather than a genuine dead end. Give it a moment before bailing.
+            // Step 1 needs this exactly as much as later steps: it was
+            // previously exempt (relying solely on resolveRoot's own internal
+            // retries after pressing HOME), which meant a slow-to-settle
+            // launcher failed the whole task immediately with no extra
+            // budget, unlike every later step.
             var settleAttempts = 0
-            while (step > 1 && (perception?.refMap?.isEmpty() != false) && settleAttempts < MAX_EMPTY_SCREEN_RETRIES) {
+            while ((perception?.refMap?.isEmpty() != false) && settleAttempts < MAX_EMPTY_SCREEN_RETRIES) {
                 settleAttempts++
                 service.awaitContentChanged(800L)
                 perception = service.captureScreen()
